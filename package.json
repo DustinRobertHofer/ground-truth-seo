@@ -1,0 +1,79 @@
+{
+  "name": "ground-truth-seo",
+  "version": "0.1.0",
+  "description": "A deterministic, cited SEO scanner: every point in the score traces to a rule, every rule to a primary source, every source to a dated verbatim quote.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DustinRobertHofer/ground-truth-seo.git"
+  },
+  "homepage": "https://www.seoscanner.app/command-line",
+  "bugs": "https://github.com/DustinRobertHofer/ground-truth-seo/issues",
+  "keywords": [
+    "seo",
+    "seo-audit",
+    "crawler",
+    "robots-txt",
+    "sitemap",
+    "deterministic",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "ground-truth-seo": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./scanner/rules": {
+      "types": "./dist/scanner/rules/index.d.ts",
+      "default": "./dist/scanner/rules/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "default": "./dist/testing/index.js"
+    },
+    "./package.json": "./package.json",
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "files": [
+    "dist",
+    "docs/*.md",
+    "docs/LICENSE",
+    "NOTICE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@rgrove/parse-xml": "^5.0.0",
+    "ai": "^7.0.127",
+    "parse5": "^8.0.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "@types/node": "^22",
+    "eslint": "^9",
+    "typescript": "^5",
+    "typescript-eslint": "^8",
+    "vitest": "^5.0.3"
+  },
+  "packageManager": "pnpm@10.28.0"
+}
