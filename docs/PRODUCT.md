@@ -60,6 +60,8 @@ Content quality, helpfulness and E-E-A-T. Rankings, traffic and click-through. B
 
 Some of these lack published, testable criteria: Google publishes questions for creators, not a rubric. Others are explicitly dismissed by the engines. A few need data the scanner never sees. In each case the report says which, pointing to the myth guard in `KNOWLEDGE.md` §6, rather than substituting a proxy.
 
+Lab performance still helps owners find what slows a page, so the home page performance diagnostics (§22) show one Lighthouse run per device class beside the field data, with diagnostics and recommendations, outside the score and without a lab score.
+
 Content quality still matters to site owners, so the advisory content review (§17) offers editorial suggestions on titles, descriptions, page content, answers to visitors' questions and llms.txt. It sits outside the score, is labeled as model output, and follows `KNOWLEDGE.md` §11. Beside it, the AI answers readiness list (§10, `KNOWLEDGE.md` §10.4) shows which documented conditions for appearing in AI answers are in place, without scoring them.
 
 ## 5. How a scan works
@@ -666,3 +668,30 @@ A report can be published at a private link, `/r/<token>`, where the token is si
 ### 21.3 Benchmarks
 
 Up to three competitor addresses can be scanned beside a report, one after the other, with the report's own configuration (page budget, engines, patterns) and without the advisory review. Each competitor is kept as a summary only: origin, host, start URL, completion time, snapshot id, ruleset version, overall score and label, intended and blocked counts, the counts of `fix` and `add` steps, and the category scores. The comparison lists the overall score and every category at least one site measured, the scanned site first; a site with no score in an area shows a dash, never a zero, and areas where every site scores the same fold into one line. The view says when the scans ran on different ruleset versions. Competitor scans are not written to anyone's history; the summaries travel with the browser's saved scan and with a private link.
+
+## 22. Home page performance diagnostics (advisory)
+
+`SEO-PERF-01` answers one question: does real-visitor field data meet Google's Core Web Vitals thresholds? Owners then ask why not, and what to change. The performance diagnostics answer that for the home page, outside the score. What they read, when each diagnostic is shown, what it says and the sources it quotes come only from `KNOWLEDGE.md` §13.
+
+### 22.1 What it shows
+
+- Field data, per device class (phones and desktops): the 75th percentile of LCP, INP, CLS, FCP and TTFB with its rating and the share of visits in each of the three ranges, the Core Web Vitals assessment, the LCP image subparts and the LCP resource types. The home page's own Chrome UX Report record is used, and the origin's when the page has too little data.
+- Lab data, per device class: one Lighthouse run through the PageSpeed Insights API on an emulated mobile device and on a desktop, with FCP, LCP, CLS and Total Blocking Time, the LCP element and the LCP breakdown into its four subparts with their shares.
+- Diagnostics: what the lab run and the field data say holds each metric back (the LCP resource found late, lazy-loaded or without high priority, render-blocking requests, long tasks, unused JavaScript, layout shifts and their causes, redirects, a slow server and more), each with the observed values, a recommendation and its quoted sources.
+- The statements of `KNOWLEDGE.md` §13.6, including why no Lighthouse score is shown, and, for an input that was not available, why.
+
+### 22.2 How it decides
+
+- Acquisition asks the Chrome UX Report API for the home page and the origin on both form factors, and the PageSpeed Insights API for one `mobile` and one `desktop` run of the home page. It runs after the scan, because the home page is the one the scan resolved, and its inputs are stored apart from the snapshot, so scan snapshots, reports and `snapshot_id` values do not change.
+- The result is a pure function of those stored inputs, like an evaluation (§5.5): no network, clock, randomness or model calls once acquisition ends, integers only, and the same inputs always give the same result.
+- Field data is read with `CRUX_API_KEY`. The lab run is read with `PAGESPEED_API_KEY`, or with `CRUX_API_KEY` when no other key is set, which works when that key's Google Cloud project has the PageSpeed Insights API enabled. A missing key leaves that input out and says so; it is never an error. Keys never enter a stored input, the result or anything printed.
+
+### 22.3 What it never does
+
+- Score anything. The diagnostics have no class or weight, add nothing to `report.json` and never change a finding. Lighthouse's performance score is never shown (`KNOWLEDGE.md` §6), and Lighthouse's own titles and descriptions are not either: every sentence comes from `KNOWLEDGE.md` §13.
+- Replace field data. A lab run is one page load on Google's servers and changes from run to run; where it and the field data disagree, the result says that the field data describes visitors.
+
+### 22.4 Where it runs
+
+- In the web app it runs when the server has a Chrome UX Report or PageSpeed Insights key, in the same streamed request as the scan, after the report has been sent and beside the advisory review, and streams progress. The result is kept with the scan in the browser.
+- From the command line, `ground-truth-seo scan <url> --performance` writes `performance.json` (the stored inputs and the result) and `performance.md` beside the report.

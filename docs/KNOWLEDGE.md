@@ -2,7 +2,7 @@
 
 The rule authority for the Ground-Truth SEO Scanner
 
-Ruleset 2.0.0 · Knowledge cutoff 2026-09-28 · Key sources re-verified 2026-10-03 · Review guidance 1.0.0 (§11, 2026-10-04) · Exposure checks 1.1.0 (§12, 2026-10-06)
+Ruleset 2.0.0 · Knowledge cutoff 2026-09-28 · Key sources re-verified 2026-10-03 · Review guidance 1.0.0 (§11, 2026-10-04) · Exposure checks 1.1.0 (§12, 2026-10-06) · Performance diagnostics 1.0.0 (§13, 2026-10-16)
 Derived from *The Ground-Truth Guide to Modern SEO* (Dustin Hofer, Book With Haven), Chapter 44 and Deliverable 5 (Developer Specification), with corrections listed in §1.4.
 
 ---
@@ -1558,6 +1558,7 @@ Source: G-UPDATES, entries for the dates shown. Retired markup is never a failur
 - 2.0.0 (2026-10-05): The score now measures distance from the best documented setup (`PRODUCT.md` §3, §7). Opportunity conditions added to §1.3: a documented practice the site has not adopted counts as unmet, with status `opportunity`. `SEO-META-02C` raised from C4 to C2 (quotes already stored for §11, read 2026-10-04). `SEO-SITEMAP-08` raised from C4 to C2 for Bing, on the stored B-SITEMAP-2025 lastmod quote. `SEO-META-05A` `no_icon_link` and `SEO-SD-04` `missing` reclassified from fail to opportunity conditions, with unchanged class and weight. §10.1 `not_a_ranking_prediction` reworded. §10.4 added: the AI answers readiness list, derived from existing findings and never scored. No source page could be re-read for this release; every quote used was already stored. A class and formula change, so a major release.
 - Exposure checks 1.0.0 (2026-10-06): Added §12, the checks behind the security checker (`PRODUCT.md` §20). They are not SEO rules: no rule, condition, class or weight changed, so the ruleset version is unchanged. Sources added: OWASP-WSTG-INFO-05, OWASP-WSTG-CONF-04, OWASP-SECRETS, GIT-HTTP, GIT-CRED-STORE, GH-TOKENS, ECMA-426, WHATWG-URL, OPENSSL-FORMAT, NEXT-SOURCEMAPS, NEXT-ENV. Their quotes were read in each project's published source files, as the `SOURCES.md` re-verification log records.
 - Exposure checks 1.1.0 (2026-10-06): Added `SEC-DATA-01` (access codes) and `SEC-DATA-02` (password hashes), which find private fields that pages send to the browser when whole records are passed instead of the properties a page shows, and §12.7, a search of the served text for terms the person running the checker enters. §12.3 gained the quoted string and name word definitions; `SEC-SECRET-04` now reads quotes escaped with backslashes or written as `&quot;`, so it also reads data that pages embed for their scripts. No SEO rule changed. Sources added: OWASP-API3, NEXT-DATA-SECURITY, REACT-TAINT-OBJECT, REACT-TAINT-VALUE, read in each project's published source files.
+- Performance diagnostics 1.0.0 (2026-10-16): Added §13, the advisory performance diagnostics of the home page (`PRODUCT.md` §22): all five web vitals from Chrome UX Report field data, one Lighthouse lab run per device class through the PageSpeed Insights API, the LCP breakdown, and diagnostics with recommendations. They are not SEO rules: no rule, condition, class or weight changed, so the ruleset version is unchanged, and no lab score is shown (§6). Sources added: WEBDEV-LCP, WEBDEV-INP, WEBDEV-CLS, WEBDEV-FCP, WEBDEV-TTFB, WEBDEV-THRESHOLDS, WEBDEV-OPT-LCP, WEBDEV-OPT-INP, WEBDEV-OPT-CLS, WEBDEV-OPT-TTFB, PSI-ABOUT, CRUX-METRICS. Every §13 quote was read on the live page on 2026-10-16.
 
 ---
 
@@ -2083,3 +2084,268 @@ The person running the checker may also enter search terms, such as the name of 
 | `object` | `{` | "an object" |
 | `array` | `[` | "an array" |
 | `other` | anything else, such as a variable | "an expression" |
+
+---
+
+## 13. Home page performance diagnostics (advisory)
+
+Performance diagnostics 1.0.0 · Sources read 2026-10-16
+
+The performance diagnostics (`PRODUCT.md` §22) show how the home page loads: the five web vitals in Chrome UX Report field data, one Lighthouse lab run per device class through the PageSpeed Insights API, what in that run holds each metric back, and what the sources recommend doing about it. This section is the only source of what they read, when each diagnostic is shown and what it says. They are not SEO rules. They carry no class or weight, never enter the score or `report.json`, and never change a finding; `SEO-PERF-01` remains the only performance rule the score counts. No Lighthouse score is shown (§6, "A perfect PageSpeed score is needed").
+
+### 13.1 How to read this section
+
+- Diagnostic IDs (`PERF-<METRIC>-<NN>`) are stable identifiers, like rule IDs. A retired diagnostic keeps its ID, and an ID is never reused.
+- Each diagnostic names the metric it affects (`Metric`) and whether it reads field data, lab data or both (`input`), what it reads (`Inspect`), one line per condition under which it is shown (`Shown`), a statement template per condition (`Statement`), what to do (`Recommendation`) and its sources (`Cite`). A citation line that starts with condition codes in brackets is emitted only for those conditions, as in §1.3.
+- A diagnostic never says that a page fails. It says what was measured and what the sources recommend. Conditions read values the inputs carry; thresholds come only from §13.3 and §13.4.
+- Lighthouse's own titles, descriptions and scores are never shown. Values from its audits (durations, byte counts, URLs, element selectors and HTML snippets, and the reasons Chrome gives for refusing the back/forward cache) are shown as observed values.
+- A diagnostic whose audit is missing from the lab run, or whose input is absent, is not shown. Diagnostics are listed by metric in the order of §13.3, then by ID, condition and device (phones first).
+- Templates are filled only from observed values, in the formats of §1.5, with these additions: `{device}` is "phones" or "desktops"; `{run}` is "mobile" or "desktop"; `{share}` is an integer percentage; byte counts read "<integer> bytes"; `{examples}` gives the first three listed items in the order the run lists them, followed by " and <n> more" when there are more; `{scope_label}` is "the home page" or "the origin {origin}"; `{element}` is the LCP element's selector, and a list of shifted elements is their selectors, each "not named by the run" when the run names none; a missing value reads "no data".
+
+### 13.2 Inputs
+
+- Field data: the Chrome UX Report API record for the home page URL, on the form factors PHONE and DESKTOP, or, when the API has no record for the URL on a form factor, the record for the preferred origin. It is read with the key in `CRUX_API_KEY`. Stored per form factor: the scope, the collection period, each §13.3 metric's 75th percentile and its three histogram bins (start, end, and density in integer basis points parsed from the decimal the API returns, without floating point), the four LCP image subparts at the 75th percentile (§13.4) and the LCP resource type fractions.
+- Lab data: one PageSpeed Insights API run (`runPagespeed`, category `performance`, locale `en`) of the home page per strategy, `mobile` and `desktop`. It is read with the key in `PAGESPEED_API_KEY`, or the key in `CRUX_API_KEY` when no other is set. Stored per run: the Lighthouse version, the final URL, the run's `fetchTime`, a runtime error code if any, and the values of the audits each diagnostic names, normalized to integers (milliseconds, bytes, CLS in thousandths).
+- The keys never enter a stored input, the result or anything printed. Without a key, that input is not requested and the result says so (§13.6). Diagnosis is a pure function of the stored inputs: the same inputs always give the same result.
+
+### 13.3 Metrics and thresholds
+
+| Metric | Name | Core Web Vital | Field input | Lab input | Good | Poor |
+|---|---|---|---|---|---|---|
+| `LCP` | Largest Contentful Paint | yes | `largest_contentful_paint` | `largest-contentful-paint` | 2,500 ms | 4,000 ms |
+| `INP` | Interaction to Next Paint | yes | `interaction_to_next_paint` | none | 200 ms | 500 ms |
+| `CLS` | Cumulative Layout Shift | yes | `cumulative_layout_shift` | `cumulative-layout-shift` | 0.100 | 0.250 |
+| `FCP` | First Contentful Paint | no | `first_contentful_paint` | `first-contentful-paint` | 1,800 ms | 3,000 ms |
+| `TTFB` | Time to First Byte | no | `experimental_time_to_first_byte` | none | 800 ms | 1,800 ms |
+| `TBT` | Total Blocking Time | no | none | `total-blocking-time` | none | none |
+
+A value at or below Good is rated `good`, a value above Poor is rated `poor`, and a value in between `needs improvement`. Field values are rated at the 75th percentile. The same thresholds rate lab values, and a lab rating describes one run, not visitors. TBT has no rating: it is shown as the lab stand-in for INP, which a page load without interactions cannot measure.
+
+Core Web Vitals assessment, per form factor with field data: `passes` when LCP, INP and CLS are all good; `passes` when INP has no data and LCP and CLS are good; `cannot be assessed` when LCP or CLS has no data; otherwise `does not pass`.
+
+Cite:
+- WEBDEV-LCP · What is a good LCP score?: "To provide a good user experience, sites should strive to have Largest Contentful Paint of 2.5 seconds or less."
+- WEBDEV-THRESHOLDS · Largest Contentful Paint: "Thus, we conclude that 2.5 seconds is a reasonable \"good\" threshold, and 4 seconds is a reasonable \"poor\" threshold for Largest Contentful Paint."
+- WEBDEV-INP · What is a good INP score?: "An INP below or at 200 milliseconds means a page has good responsiveness."
+- WEBDEV-INP · What is a good INP score?: "An INP above 500 milliseconds means a page has poor responsiveness."
+- WEBDEV-CLS · What is a good CLS score?: "Good CLS values are 0.1 or less. Poor values are greater than 0.25."
+- WEBDEV-FCP · What is a good FCP score?: "Good FCP values are 1.8 seconds or less. Poor values are greater than 3.0 seconds"
+- WEBDEV-TTFB · What is a good TTFB score?: "Good TTFB values are 0.8 seconds or less, and poor values are greater than 1.8 seconds."
+- WEBDEV-VITALS · Other Web Vitals: "the metrics Time to First Byte (TTFB) and First Contentful Paint (FCP) are both vital aspects of the loading experience, and are both useful in diagnosing issues with LCP (slow server response times or render-blocking resources, respectively)."
+- WEBDEV-INP · In the lab: "In such cases, Total Blocking Time (TBT) may be a reasonable proxy metric for INP, but it's not a substitute for INP in and of itself."
+- PSI-ABOUT · Core Web Vitals: "the aggregation passes the Core Web Vitals assessment if the 75th percentiles of all three metrics are Good."
+- PSI-ABOUT · Core Web Vitals: "If the aggregation has insufficient data for INP, then it will pass the assessment if both the 75th percentiles of LCP and CLS are Good. If either LCP or CLS have insufficient data, the page or origin-level aggregation cannot be assessed."
+
+### 13.4 LCP breakdown
+
+| Subpart | Name | Field input | Lab input | Optimal share |
+|---|---|---|---|---|
+| `ttfb` | Time to first byte | `largest_contentful_paint_image_time_to_first_byte` | `timeToFirstByte` | about 40% |
+| `load_delay` | Resource load delay | `largest_contentful_paint_image_resource_load_delay` | `resourceLoadDelay` | under 10% |
+| `load_duration` | Resource load duration | `largest_contentful_paint_image_resource_load_duration` | `resourceLoadDuration` | about 40% |
+| `render_delay` | Element render delay | `largest_contentful_paint_image_element_render_delay` | `elementRenderDelay` | under 10% |
+
+Lab subparts come from the `lcp-breakdown-insight` audit, with the LCP element's selector and HTML snippet. A subpart the run does not list (a text element has no resource) counts as 0 ms. Shares are computed for the lab run only: the subpart's milliseconds times 100, divided by the sum of the four, rounded down. Field subparts are 75th percentiles of separate distributions, from page loads whose LCP element is an image, and are shown as values beside the LCP resource type fractions, never as shares or a sum.
+
+Cite:
+- WEBDEV-OPT-LCP · LCP breakdown: "Every single page can have its LCP value broken down into these four subparts. There is no overlap or gap between them. Collectively, they add up to the full LCP time."
+- WEBDEV-OPT-LCP · Optimal subpart times: "Note that these time breakdowns are guidelines, not strict rules."
+- WEBDEV-OPT-LCP · Optimal subpart times: "These subparts are only meaningful relative to each other, so it's best to always measure them that way."
+- CRUX-METRICS · LCP image subparts: "As they represent aggregated data across many page views, image subparts are provided at the 75th percentile so the sum of the subparts aren't expected to equal the overall LCP 75th percentile."
+
+### 13.5 Diagnostics
+
+#### PERF-LCP-01 · The LCP resource starts loading late
+Metric: LCP · input: lab
+Inspect: the `lcp-breakdown-insight` subparts and LCP element.
+Shown `load_delay`: resource load delay is 10% or more of the sum of the four subparts.
+Statement `load_delay`: "In the {run} lab run, the LCP element ({element}) started loading its resource {value} after the first byte arrived: {share}% of its {lcp} LCP. On a well-optimized page, web.dev puts resource load delay under 10% of LCP."
+Recommendation: Let the browser find the LCP resource in the HTML and start it with the first resources the page loads: give the image an `<img>` element with `src` or `srcset` in the server's HTML, preload it with `fetchpriority="high"` when only CSS or JavaScript references it, never lazy-load it, and serve it from the page's own origin where you can.
+Cite:
+- WEBDEV-OPT-LCP · 1. Eliminate resource load delay: "A good rule of thumb is that your LCP resource should start loading at the same time as the first resource loaded by that page."
+- WEBDEV-OPT-LCP · Optimal subpart times: "Of the four subparts, two have the word \"delay\" in their names. That is a clue that you want to get these times as close to zero as possible."
+- WEBDEV-OPT-LCP · Optimize the priority the resource is given: "When possible, it's a good idea to host critical resources on the same origin as your HTML document resource because then those resources can save time by reusing the existing connection"
+
+#### PERF-LCP-02 · The LCP image is lazy-loaded
+Metric: LCP · input: lab
+Inspect: the `eagerlyLoaded` item of the `lcp-discovery-insight` checklist, and the LCP element.
+Shown `lazy`: `eagerlyLoaded` is false.
+Statement `lazy`: "In the {run} lab run, the LCP element ({element}) is lazy-loaded, so the browser waits for layout before it requests the image."
+Recommendation: Remove `loading="lazy"` from the LCP image, and from any image that may be the largest element on another screen size. Keep lazy loading for images further down the page.
+Cite:
+- WEBDEV-OPT-LCP · Optimize the priority the resource is given: "Never lazy-load your LCP image, as that will always lead to unnecessary resource load delay, and will have a negative impact on LCP."
+- WEBDEV-OPT-LCP · Optimize the priority the resource is given: "Using lazy loading means that the resource won't be loaded until after layout confirms the image is in the viewport and so may begin loading later than it otherwise would."
+
+#### PERF-LCP-03 · The LCP resource is not in the initial HTML
+Metric: LCP · input: lab
+Inspect: the `requestDiscoverable` item of the `lcp-discovery-insight` checklist, and the LCP element.
+Shown `not_discoverable`: `requestDiscoverable` is false.
+Statement `not_discoverable`: "In the {run} lab run, the browser could not find the resource of the LCP element ({element}) in the initial HTML document, so it could request it only after a script or style sheet referenced it."
+Recommendation: Put the image in the HTML the server sends, as an `<img>` element with `src` or `srcset` (not `data-src` filled in by a script). When only a style sheet or a script can reference it, preload it with `<link rel="preload" as="image" fetchpriority="high">`.
+Cite:
+- WEBDEV-OPT-LCP · Optimize when the resource is discovered: "To eliminate unnecessary resource load delay, your LCP resource should be discoverable from the HTML source. In cases where the resource is only referenced from an external CSS or JavaScript file, the LCP resource should be preloaded with a high fetch priority"
+
+#### PERF-LCP-04 · The LCP image is not requested with high priority
+Metric: LCP · input: lab
+Inspect: the `priorityHinted` item of the `lcp-discovery-insight` checklist, and the LCP element.
+Shown `no_priority`: `priorityHinted` is false.
+Statement `no_priority`: "In the {run} lab run, the LCP element ({element}) is an image requested without fetchpriority=\"high\"."
+Recommendation: Add `fetchpriority="high"` to the LCP image's `<img>` element, or to its preload, and to no more than one or two images on the page.
+Cite:
+- WEBDEV-OPT-LCP · Optimize the priority the resource is given: "It's a good idea to set fetchpriority=\"high\" on an <img> element if you think it's likely to be your page's LCP element. However, setting a high priority on more than one or two images makes priority setting unhelpful in reducing LCP."
+
+#### PERF-LCP-05 · The LCP element renders late
+Metric: LCP · input: lab
+Inspect: the `lcp-breakdown-insight` subparts and LCP element.
+Shown `render_delay`: element render delay is 10% or more of the sum of the four subparts.
+Statement `render_delay`: "In the {run} lab run, the LCP element ({element}) rendered {value} after its resource finished loading: {share}% of its {lcp} LCP. On a well-optimized page, web.dev puts element render delay under 10% of LCP."
+Recommendation: Find what holds rendering back once the resource has arrived: style sheets and synchronous scripts in the `<head>` (`PERF-FCP-01`), an element that JavaScript adds instead of the server's HTML, a script that hides content until it decides what to show, or long tasks on the main thread (`PERF-INP-01`). Server-side rendering or static generation removes the wait for scripts.
+Cite:
+- WEBDEV-OPT-LCP · 2. Eliminate element render delay: "The goal in this step is to ensure the LCP element can render immediately after its resource has finished loading, no matter when that happens."
+- WEBDEV-OPT-LCP · Use server-side rendering: "Your page content won't require additional JavaScript requests to finish before it can render."
+
+#### PERF-LCP-06 · Images could be smaller
+Metric: LCP · input: lab
+Inspect: the `image-delivery-insight` items: URL, size and estimated saving.
+Shown `smaller`: at least one image has an estimated saving above zero.
+Statement `smaller`: "In the {run} lab run, Lighthouse estimates that {count} images could be {bytes} smaller in all; the largest saving is {top_bytes} on {top_url}."
+Recommendation: Serve each image compressed, in a modern format such as AVIF or WebP, and at the size it is displayed, or through an image CDN that does this for you. A smaller LCP image shortens resource load duration, which improves LCP only when the two delays are already short.
+Cite:
+- WEBDEV-OPT-LCP · LCP breakdown: "if you reduced the file size of our image by compressing it more or switching to a more optimal format (such as AVIF or WebP), that would reduce the resource load duration, but it wouldn't actually improve LCP because the time would just shift to the element render delay subpart"
+- WEBDEV-OPT-LCP · Reduce the distance the resource has to travel: "Image CDNs in particular are especially helpful because they not only reduce the distance the resource has to travel, but they also generally reduce the size of the resource—automatically implementing all of the size-reduction recommendations from earlier for you."
+
+#### PERF-INP-01 · Long tasks keep the main thread busy
+Metric: INP · input: field and lab
+Inspect: the field INP; the `long-tasks` items (URL and duration) and the lab Total Blocking Time.
+Shown `field`: the field INP is above 200 ms.
+Shown `long_tasks`: the run lists at least one long task.
+Statement `field`: "Real visitors on {device} waited {value} at the 75th percentile for {scope_label} to respond to an interaction ({first_date} to {last_date}), above the 'good' value of 200 ms."
+Statement `long_tasks`: "In the {run} lab run, the main thread ran {count} long tasks while the page loaded, the longest for {longest} ({longest_url}); Total Blocking Time was {tbt}."
+Recommendation: Send less JavaScript at startup and split what remains, break long tasks up by yielding to the main thread, and keep event handlers to the work that updates the next frame, deferring the rest.
+Cite:
+- WEBDEV-OPT-INP · The relationship between script evaluation and long tasks during startup: "Depending on the size of a script, this work can introduce long tasks on the main thread, which will delay the browser from responding to other user interactions."
+- WEBDEV-OPT-INP · Yield to the main thread often: "This prevents the collective work from becoming a long task that blocks the main thread, which allows other interactions that otherwise would be waiting on the main thread to run sooner."
+- [long_tasks] WEBDEV-INP · In the lab: "In such cases, Total Blocking Time (TBT) may be a reasonable proxy metric for INP, but it's not a substitute for INP in and of itself."
+
+#### PERF-INP-02 · JavaScript is downloaded but not used
+Metric: INP · input: lab
+Inspect: the `unused-javascript` items: URL, size and unused bytes.
+Shown `unused`: the run lists at least one script.
+Statement `unused`: "In the {run} lab run, {count} scripts carried {bytes} of JavaScript that the page did not use while loading ({examples})."
+Recommendation: Split bundles by page and load the code for a feature when it is first used, so the browser parses, compiles and runs less at startup.
+Cite:
+- WEBDEV-OPT-INP · The relationship between script evaluation and long tasks during startup: "After a JavaScript file has been fetched from the network, the browser still has work to do before that JavaScript can run; that work includes parsing a script to check its syntax is valid, compiling it into bytecode, and then finally executing it."
+- WEBDEV-FCP · How to improve FCP: "Remove unused JavaScript"
+
+#### PERF-INP-03 · Scripts force synchronous layout
+Metric: INP · input: lab
+Inspect: the `forced-reflow-insight` items: source location and reflow time.
+Shown `forced_reflow`: the run lists at least one source.
+Statement `forced_reflow`: "In the {run} lab run, scripts forced the browser to calculate layout synchronously from {count} places ({examples})."
+Recommendation: In each listed place, read the layout values you need before changing styles, or move the reads to a later task, so the browser can lay the page out once.
+Cite:
+- WEBDEV-OPT-INP · Avoid layout thrashing: "Layout thrashing is a performance bottleneck because by updating styles and then immediately requesting the values of those styles in JavaScript, the browser is forced to do synchronous layout work it otherwise could have waited to perform asynchronously later on after event callbacks have finished running."
+
+#### PERF-CLS-01 · Content shifts on the page
+Metric: CLS · input: field and lab
+Inspect: the field CLS; the lab CLS and the `cls-culprits-insight` items: shifted elements with their scores, and the causes the run names ("Unsized image element", "Web font", "Injected iframe").
+Shown `field`: the field CLS is above 0.100, and the lab CLS is above 0.100 too or there is no lab run.
+Shown `post_load`: the field CLS is above 0.100 and the lab CLS is 0.100 or less.
+Shown `lab`: the lab CLS is above 0.100.
+Statement `field`: "Real visitors on {device} saw a layout shift score of {value} at the 75th percentile on {scope_label} ({first_date} to {last_date}), above the 'good' value of 0.100."
+Statement `post_load`: "Real visitors on {device} saw a layout shift score of {value} at the 75th percentile on {scope_label} ({first_date} to {last_date}), while the {run} lab run measured {lab_value} during load, which often points to shifts after the page has loaded."
+Statement `lab`: "In the {run} lab run, the page shifted by {value} while loading; the elements that moved most were {examples}.{causes_clause}"
+Recommendation: Reserve space for everything that arrives late: width and height on images and video, a `min-height` or `aspect-ratio` on ad slots, embeds and injected banners. Animate with `transform` rather than `top` or `left`. Shifts after load come from content added on scroll, after a timer or in response to the visitor; reserve space for it too.
+Cite:
+- WEBDEV-OPT-CLS · Ads, embeds, and other late-loaded content: "Images aren't the only type of content that can cause layout shifts. Ads, embeds, iframes, and other dynamically injected content can all cause content appearing after them to shift down, increasing your CLS."
+- WEBDEV-OPT-CLS · Reserve space for late-loading content: "When placing late-loading content in the content flow, layout shifts can be avoided by reserving the space for them in the initial layout."
+- WEBDEV-OPT-CLS · Animations: "Changing the top and left properties also cause layout shifts, even when the element being moved is on its own layer. Avoid animating using these properties."
+- [post_load] WEBDEV-OPT-CLS · CLS in lab tools versus field: "Disagreement between the CrUX and Lighthouse CLS scores often indicates post-load CLS."
+- [lab] WEBDEV-OPT-CLS · CLS in lab tools versus field: "Lighthouse will identify the elements that were shifted, but often these are the ones impacted rather than the elements causing the CLS."
+Notes: `{causes_clause}` is " Lighthouse traced shifts to {causes}." when the run names causes, where `{causes}` counts each cause, as in "2 unsized images and 1 web font", otherwise empty. Elements are named by their selectors.
+
+#### PERF-CLS-02 · Images have no width and height
+Metric: CLS · input: lab
+Inspect: the `unsized-images` items: URL and element.
+Shown `unsized`: the run lists at least one image.
+Statement `unsized`: "In the {run} lab run, {count} images have no explicit width and height ({examples})."
+Recommendation: Add `width` and `height` attributes to every `<img>` and `<video>` element (CSS can still resize them, with `height: auto`), or reserve their space with CSS `aspect-ratio`.
+Cite:
+- WEBDEV-OPT-CLS · Images without dimensions: "Always include width and height size attributes on your images and video elements. Alternatively, reserve the required space with CSS aspect-ratio or similar."
+
+#### PERF-CLS-03 · The page cannot use the back/forward cache
+Metric: CLS · input: lab
+Inspect: the `bf-cache` items whose failure type is `Actionable`: the reason Chrome gives.
+Shown `blocked`: the run lists at least one actionable reason.
+Statement `blocked`: "In the {run} lab run, Chrome could not keep the home page in the back/forward cache: {reasons}."
+Recommendation: Remove each reason Chrome names, so that a visitor who returns with the back or forward button gets the page back as they left it, without shifting again.
+Cite:
+- WEBDEV-OPT-CLS · Reduce CLS by ensuring pages are eligible for the bfcache: "A highly effective technique for keeping CLS scores low is to ensure your web pages are eligible for the back/forward cache (bfcache)."
+- WEBDEV-OPT-CLS · Reduce CLS by ensuring pages are eligible for the bfcache: "This means the fully loaded page is instantly available—without any shifts which may be normally seen during load due to any of the reasons given earlier."
+Notes: `{reasons}` lists every reason in the order of the run, separated by "; ".
+
+#### PERF-FCP-01 · Requests block the first render
+Metric: FCP · input: lab
+Inspect: the `render-blocking-insight` items: URL, size and estimated wasted time; the audit's estimated FCP saving.
+Shown `blocking`: the run lists at least one request.
+Statement `blocking`: "In the {run} lab run, {count} requests blocked the first render ({examples}).{saving_clause}"
+Recommendation: Load scripts with `async` or `defer` instead of synchronously in the `<head>`. Make the CSS that blocks rendering small: remove unused rules, move styles the first view does not need to a later load, inline only small critical CSS, and minify and compress the rest.
+Cite:
+- WEBDEV-OPT-LCP · Defer or inline render-blocking JavaScript: "It is almost never necessary to add synchronous scripts (scripts without the async or defer attributes) to the <head> of your pages, and doing so will almost always have a negative impact on performance."
+- WEBDEV-OPT-LCP · Reduce or inline render-blocking stylesheets: "In most cases, the best way to ensure the style sheet does not block rendering of the LCP element is to reduce its size so that it's smaller than the LCP resource."
+- WEBDEV-OPT-LCP · Reduce or inline render-blocking stylesheets: "Defer non-critical CSS: split your style sheet out into styles that are required for initial page load and then styles that can be loaded lazily."
+Notes: `{saving_clause}` is " Lighthouse estimates the first render could come {saving} earlier without them." when the estimated FCP saving is above zero, otherwise empty.
+
+#### PERF-FCP-02 · Text waits for web fonts
+Metric: FCP · input: lab
+Inspect: the `font-display-insight` items: URL and estimated wasted time.
+Shown `font_display`: the run lists at least one font.
+Statement `font_display`: "In the {run} lab run, {count} web fonts loaded without a font-display value that keeps text visible while they download ({examples})."
+Recommendation: Set `font-display` to `swap`, `fallback` or `optional` in each `@font-face` rule. `optional` also avoids a layout shift when the font arrives late, and preloading the fonts the first view needs helps them arrive in time.
+Cite:
+- WEBDEV-OPT-LCP · Eliminate the network time entirely: "If you set a font-display value of anything other than auto or block, then text will always be visible during load, and LCP won't be blocked on an additional network request."
+- WEBDEV-OPT-CLS · Web fonts: "font-display: optional can avoid a re-layout as the web font is only used if it is available by the time of initial layout."
+
+#### PERF-TTFB-01 · The home page redirects before it loads
+Metric: TTFB · input: lab
+Inspect: the `noRedirects` item of the `document-latency-insight` checklist and the redirect duration.
+Shown `redirects`: `noRedirects` is false.
+Statement `redirects`: "In the {run} lab run, the request for {url} went through redirects that took {value} before the page itself was requested."
+Recommendation: Link to the final URL everywhere you control, including navigation, sitemaps, ads and newsletters, and send an HSTS header so that browsers go straight to HTTPS on later visits.
+Cite:
+- WEBDEV-OPT-TTFB · Avoid multiple page redirects: "Eliminating redirects under your direct control can help to achieve a good TTFB."
+- WEBDEV-OPT-TTFB · Avoid multiple page redirects: "Focus on eliminating same-origin redirects, as this is something you have direct control over."
+- WEBDEV-OPT-TTFB · Avoid multiple page redirects: "One way you can get around this is to use the Strict-Transport-Security header (HSTS), which enforces HTTPS on the first visit to an origin, and then tells the browser to immediately access the origin through the HTTPS scheme on future visits."
+
+#### PERF-TTFB-02 · The server responds slowly
+Metric: TTFB · input: field and lab
+Inspect: the field TTFB; the `serverResponseIsFast` item of the `document-latency-insight` checklist and the observed server response time.
+Shown `field`: the field TTFB is above 800 ms.
+Shown `lab`: `serverResponseIsFast` is false.
+Statement `field`: "Real visitors on {device} waited {value} at the 75th percentile for the first byte of {scope_label} ({first_date} to {last_date}), above the 'good' value of 800 ms."
+Statement `lab`: "In the {run} lab run, the server took {value} to answer the request for the home page."
+Recommendation: Check first that the hosting can handle the traffic. Then serve the page through a CDN, with `Cache-Control` headers that let its edge servers keep a copy, and stream or statically render the HTML so the first bytes leave early.
+Cite:
+- WEBDEV-OPT-TTFB · Hosting, hosting, hosting: "Before you even consider other optimization approaches, hosting should be the first thing you consider."
+- WEBDEV-OPT-TTFB · Use a Content Delivery Network (CDN): "While adopting a CDN involves a varying amount of effort from trivial to significant, it should be a high priority to pursue in optimizing your TTFB if your website is not already using one."
+- WEBDEV-OPT-TTFB · Use cached content where possible: "CDNs allow content to be cached at edge servers which are located physically closer to visitors, provided the content is configured with the appropriate Cache-Control HTTP headers."
+- [field] WEBDEV-TTFB · What is a good TTFB score?: "Because TTFB isn't a Core Web Vitals metric, it's not absolutely necessary that sites meet the \"good\" TTFB threshold, provided that it doesn't impede their ability to score well on the metrics that matter."
+
+### 13.6 Statements
+
+Shown with every result, in this order, then the statements for inputs that were not available.
+
+| Key | Text | Source |
+|---|---|---|
+| `advisory` | "These diagnostics are advisory. They are not SEO rules: they carry no weight, never change the score and are not part of report.json. In the report, SEO-PERF-01 judges the same Core Web Vitals field data." | Scanner statement |
+| `field_first` | "If Lighthouse and CrUX disagree, then CrUX likely provides a more accurate picture of your user experience." | WEBDEV-OPT-LCP · Using PageSpeed Insights Lighthouse data |
+| `lab_one_run` | "Lab data is useful for debugging issues, as it is collected in a controlled environment. However, it may not capture real-world bottlenecks." | PSI-ABOUT · About PageSpeed Insights |
+| `no_lab_score` | "No Lighthouse score is shown. Google says that \"trying to get a perfect score just for SEO reasons may not be the best use of your time\"." | G-PAGE-EXP · What aspects of page experience are used in ranking? |
+| `field_off` | "Field data was not requested: no Chrome UX Report API key is configured (CRUX_API_KEY)." | Scanner statement |
+| `field_none` | "The Chrome UX Report has no field data for the home page or for the origin on {device}. It includes only pages and origins with enough real visits from Chrome users." | Scanner statement |
+| `field_origin` | "The Chrome UX Report has too little data for the home page itself on {device}, so field values there are for the whole origin." | Scanner statement |
+| `field_failed` | "The Chrome UX Report could not be read for {device}: {error}." | Scanner statement |
+| `lab_off` | "The lab run was not requested: no PageSpeed Insights API key is configured (PAGESPEED_API_KEY, or CRUX_API_KEY when that key's Google Cloud project has the PageSpeed Insights API enabled)." | Scanner statement |
+| `lab_failed` | "PageSpeed Insights could not complete the {run} lab run: {error}." | Scanner statement |
+
+`{error}` is one of: "the API answered HTTP <status>", "the request timed out", "a connection error", "the response could not be read", or "Lighthouse reported <code>", where `<code>` is the run's runtime error code when it consists only of capital letters, digits and underscores, and "an error" otherwise.

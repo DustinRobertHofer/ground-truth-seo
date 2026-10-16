@@ -85,6 +85,18 @@ Ruleset 2.0.0 · Knowledge cutoff 2026-09-28 · Partial re-verification 2026-10-
 |---|---|---|---|---|
 | WEBDEV-VITALS | Web Vitals | https://web.dev/articles/vitals | 2024-10-31 | 2026-10-03 |
 | CRUX-METHOD | CrUX methodology | https://developer.chrome.com/docs/crux/methodology | 2024-06-20 | 2026-10-03 |
+| WEBDEV-LCP | Largest Contentful Paint (LCP) | https://web.dev/articles/lcp | 2025-09-04 | 2026-10-16 |
+| WEBDEV-INP | Interaction to Next Paint (INP) | https://web.dev/articles/inp | 2025-09-02 | 2026-10-16 |
+| WEBDEV-CLS | Cumulative Layout Shift (CLS) | https://web.dev/articles/cls | 2023-04-12 | 2026-10-16 |
+| WEBDEV-FCP | First Contentful Paint (FCP) | https://web.dev/articles/fcp | 2023-12-06 | 2026-10-16 |
+| WEBDEV-TTFB | Time to First Byte (TTFB) | https://web.dev/articles/ttfb | 2025-11-28 | 2026-10-16 |
+| WEBDEV-THRESHOLDS | How the Core Web Vitals metrics thresholds were defined | https://web.dev/articles/defining-core-web-vitals-thresholds | 2025-05-07 | 2026-10-16 |
+| WEBDEV-OPT-LCP | Optimize Largest Contentful Paint | https://web.dev/articles/optimize-lcp | 2025-03-31 | 2026-10-16 |
+| WEBDEV-OPT-INP | Optimize Interaction to Next Paint | https://web.dev/articles/optimize-inp | 2025-09-02 | 2026-10-16 |
+| WEBDEV-OPT-CLS | Optimize Cumulative Layout Shift | https://web.dev/articles/optimize-cls | 2025-02-07 | 2026-10-16 |
+| WEBDEV-OPT-TTFB | Optimize Time to First Byte | https://web.dev/articles/optimize-ttfb | 2025-11-28 | 2026-10-16 |
+| CRUX-METRICS | CrUX metrics | https://developer.chrome.com/docs/crux/methodology/metrics | 2026-10-13 | 2026-10-16 |
+| PSI-ABOUT | About PageSpeed Insights | https://developers.google.com/speed/docs/insights/v5/about | 2024-10-21 | 2026-10-16 |
 
 ## Microsoft Bing
 
@@ -169,3 +181,4 @@ Sources for the security checker's exposure checks (`KNOWLEDGE.md` §12). None o
 | 2026-10-04 | G-AI-OPT, G-HELPFUL, G-SNIPPET, G-STARTER, G-TITLE, B-AI-PERF, MS-AI-ANSWERS, LLMSTXT | Read on the live pages for the review guidance in `KNOWLEDGE.md` §11. B-AI-PERF, MS-AI-ANSWERS and LLMSTXT registered. The Verified dates of the five Google sources are unchanged because the rule quotes they back were not re-checked; their §11 quotes date from this reading. |
 | 2026-10-06 | OWASP-WSTG-INFO-05, OWASP-WSTG-CONF-04, OWASP-SECRETS, GIT-HTTP, GIT-CRED-STORE, GH-TOKENS, ECMA-426, WHATWG-URL, OPENSSL-FORMAT, NEXT-SOURCEMAPS, NEXT-ENV | Registered for `KNOWLEDGE.md` §12. The rendered pages could not be reached from the build environment, so every quote was read in the file each page is published from and checked as an exact substring after stripping markup and normalizing whitespace: OWASP/wstg at commit 4182523, OWASP/CheatSheetSeries at 29994dd, git/git `Documentation/` at 5a7d1e8, github/docs at b976e25 (with its `product.yml` variables expanded), tc39/ecma426 `spec.emu` at c724f0f, whatwg/url `url.bs` and openssl/openssl `doc/man1/openssl-format-options.pod` on their main branches, and the Next.js documentation shipped in next 16.2.4 and on vercel/next.js canary. All 26 citation quotes match. "Verified" carries "(source file)" until a person re-reads the rendered pages; "Last updated" was not read for the same reason. |
 | 2026-10-06 | OWASP-API3, NEXT-DATA-SECURITY, REACT-TAINT-OBJECT, REACT-TAINT-VALUE | Registered for `SEC-DATA-01` and `SEC-DATA-02` (`KNOWLEDGE.md` §12, exposure checks 1.1.0). As with the first §12 sources, the rendered pages could not be reached from the build environment, so every quote was read in the file each page is published from and checked as an exact substring after stripping markup and normalizing whitespace and quote marks: OWASP/API-Security `editions/2023/en/0xa3-broken-object-property-level-authorization.md` at 33cea37, the Next.js documentation shipped in next 16.2.4 (`dist/docs/01-app/02-guides/data-security.md`) and on vercel/next.js canary at 0e912cb, and reactjs/react.dev `src/content/reference/react/` at 046f17d. All 7 citation quotes match. "Verified" carries "(source file)" until a person re-reads the rendered pages; "Last updated" was not read for the same reason. |
+| 2026-10-16 | WEBDEV-LCP, WEBDEV-INP, WEBDEV-CLS, WEBDEV-FCP, WEBDEV-TTFB, WEBDEV-THRESHOLDS, WEBDEV-OPT-LCP, WEBDEV-OPT-INP, WEBDEV-OPT-CLS, WEBDEV-OPT-TTFB, CRUX-METRICS, PSI-ABOUT | Registered for `KNOWLEDGE.md` §13 (performance diagnostics 1.0.0) and read on the live pages. Every §13 quote, 55 in all, was checked as an exact substring of the rendered page after stripping markup and normalizing whitespace and quote marks; all match. The §13 statement quoting G-PAGE-EXP uses the page's current section label, "What aspects of page experience are used in ranking?"; the G-PAGE-EXP row and its rule quotes were not re-checked. |

@@ -25,6 +25,11 @@ picks them up by upgrading the package.
   allowed. It runs after evaluation and never touches report.json or the score. Its instructions
   come only from KNOWLEDGE.md §11, transcribed in src/content-review/guidance.ts and checked by
   guidance.test.ts; change §11 first, with a registered source and a verbatim quote.
+- The performance diagnostics (PRODUCT.md §22, src/performance/) are not an SEO rule set and never
+  touch the score or report.json, and no Lighthouse score is ever shown (KNOWLEDGE.md §6). What they
+  read, when each diagnostic is shown and every sentence they print come only from KNOWLEDGE.md §13,
+  transcribed in src/performance/knowledge.ts and checked by knowledge.test.ts. Diagnosis is a pure
+  function of the stored inputs (diagnose.ts); network calls live in acquire.ts only.
 - The security checker (PRODUCT.md §20, src/security/) is not an SEO rule set and never touches the
   score. Its checks, confirmation rules and wording come only from KNOWLEDGE.md §12, transcribed in
   src/security/knowledge.ts and checked by knowledge.test.ts. It must never emit, store or log a
@@ -39,10 +44,10 @@ picks them up by upgrading the package.
 - The package version (package.json) is independent of RULESET_VERSION and SCANNER_VERSION. A
   ruleset change bumps RULESET_VERSION in src/scanner/rules/index.ts as KNOWLEDGE.md §9 says;
   reports carry the ruleset version, never the package version.
-- The command line reads plain environment variables only (CRUX_API_KEY, AI_GATEWAY_API_KEY,
-  AI_REVIEW_MODEL, AI_REVIEW_DISABLED). It loads no .env file. Keys never enter a snapshot, a
-  report, a review file or anything printed; src/cli/main.ts redacts them as a last line of
-  defense.
+- The command line reads plain environment variables only (CRUX_API_KEY, PAGESPEED_API_KEY,
+  AI_GATEWAY_API_KEY, AI_REVIEW_MODEL, AI_REVIEW_DISABLED). It loads no .env file. Keys never enter
+  a snapshot, a report, a review or performance file or anything printed; src/cli/main.ts redacts
+  them as a last line of defense.
 - The agent skill (skills/ground-truth-seo/SKILL.md) is rendered by src/skill/skill.ts from the
   command line's options and holds no SEO knowledge of its own. Regenerate it with `pnpm skill`
   after changing src/cli/options.ts or the skill text; skill.test.ts fails while the copy is stale.

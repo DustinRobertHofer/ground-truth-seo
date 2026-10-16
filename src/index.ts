@@ -56,3 +56,11 @@ export { extractContent, DEFAULT_REVIEW_PAGES, MAX_REVIEW_PAGES, type ExtractOpt
 export { aiReviewConfigured, reviewContent, reviewModel, DEFAULT_REVIEW_MODEL, type ReviewOptions } from "./content-review/review.js";
 export { renderReviewMarkdown } from "./content-review/markdown.js";
 export type { ContentReview, SiteContent, PageContent } from "./content-review/types.js";
+
+// The home page performance diagnostics (PRODUCT.md §22, KNOWLEDGE.md §13). Never part of the score.
+export { acquirePerformance, pagespeedApiKey } from "./performance/acquire.js";
+export { diagnosePerformance } from "./performance/diagnose.js";
+export { renderPerformanceMarkdown } from "./performance/markdown.js";
+export { homePageOfOrigin, performanceConfigured, runPerformance } from "./performance/run.js";
+export { PERFORMANCE_DIAGNOSTICS_VERSION } from "./performance/knowledge.js";
+export type { PerformanceFile, PerformanceInput, PerformanceResult } from "./performance/types.js";

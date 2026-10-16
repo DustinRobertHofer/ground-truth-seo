@@ -77,6 +77,7 @@ Run `scan` against a preview or staging deployment, keep `report.json`, `report.
 Both keys are optional; a scan without them still runs every rule that does not need them, and reports the rest as not evaluated. The command line reads plain environment variables and does not load `.env` files.
 
 - **`CRUX_API_KEY`**: In the Google Cloud console, choose or create a project, enable the Chrome UX Report API, then create an API key under APIs & Services > Credentials and restrict it to that API. Provider documentation: https://developer.chrome.com/docs/crux/api
+- **`PAGESPEED_API_KEY`**: In the Google Cloud console, enable the PageSpeed Insights API in the same project as the Chrome UX Report API (the CRUX_API_KEY then works for both), or create a separate API key restricted to it under APIs & Services > Credentials. Provider documentation: https://developers.google.com/speed/docs/insights/v5/get-started
 - **`AI_GATEWAY_API_KEY`**: In the Vercel dashboard, open AI Gateway, then API Keys, and choose Create key. Model calls are billed to that Vercel account. Provider documentation: https://vercel.com/docs/ai-gateway/authentication
 
 Set a key in the user's shell profile (`export NAME=value` in `~/.zshrc` or `~/.bashrc`; `setx NAME value` on Windows) or as a CI secret, then open a new terminal. Give the user these steps; do not handle the key yourself. Keys never enter a snapshot, report or review file, and the command line redacts them from anything it prints.
@@ -151,6 +152,7 @@ Writes SKILL.md, an Agent Skill that teaches a coding agent how to install and r
 | `--house-conventions` | scan, evaluate | Also reports the house-convention (-HC) rules. They carry zero weight, so the score does not move. |
 | `--third-party-resources` | scan, evaluate | Extends SEO-ROBOTS-05B (resources needed for rendering are crawlable) to resources served from other origins. |
 | `--crux` | scan | Asks the Chrome UX Report API for field data for the origin and the home page, on phones and desktops, which SEO-PERF-01 judges against Google's thresholds. The key never enters the snapshot or the report. Needs `CRUX_API_KEY`. |
+| `--performance` | scan | After the scan, reads Chrome UX Report field data for the home page (with CRUX_API_KEY) and runs Lighthouse on it through PageSpeed Insights, on mobile and desktop (with PAGESPEED_API_KEY, or CRUX_API_KEY when its project has that API enabled). Writes performance.json and performance.md: all five web vitals, the LCP breakdown, and diagnostics with recommendations and their sources. Advisory: it never changes the score or report.json, and shows no Lighthouse score. Needs `PAGESPEED_API_KEY`. |
 | `--review` | scan | Runs the advisory AI review right after the scan and writes review.json and review.md beside the report. Needs `AI_GATEWAY_API_KEY`. |
 | `--review-pages <n>` | scan, review | How many pages the review reads (default 6, at most 20). |
 | `--queries "<a;b>"` | scan, review | Searches the pages should answer, separated by semicolons. |
@@ -165,13 +167,16 @@ Writes SKILL.md, an Agent Skill that teaches a coding agent how to install and r
 | `snapshot.json` | Everything the scan fetched: requests, responses, content-addressed bodies, DNS and TLS records and the one clock reading. Its ID is the SHA-256 of its canonical manifest. |
 | `review.json` | The advisory review (with --review or review). Never part of the report or the score. |
 | `review.md` | A readable view of the review. |
+| `performance.json` | With --performance: the stored field data and lab runs of the home page and the diagnostics built from them. Never part of the report or the score. |
+| `performance.md` | A readable view of the performance diagnostics. |
 | `SKILL.md` | The agent skill (skill command): how a coding agent installs, runs and reads the command line. |
 
 ### Environment variables
 
 | Variable | Effect |
 | --- | --- |
-| `CRUX_API_KEY` | A Chrome UX Report API key, required by --crux. |
+| `CRUX_API_KEY` | A Chrome UX Report API key, required by --crux, and the field data of --performance. |
+| `PAGESPEED_API_KEY` | A PageSpeed Insights API key for the lab run of --performance. Without it, --performance uses CRUX_API_KEY. |
 | `AI_GATEWAY_API_KEY` | A Vercel AI Gateway API key, required by --review and the review command. It works on any machine; no Vercel project is needed. |
 | `AI_REVIEW_MODEL` | The Gateway model ID the review uses (default anthropic/claude-sonnet-5.5). |
 | `AI_REVIEW_DISABLED` | Set to 1 to turn the review off. |

@@ -27,7 +27,9 @@ import {
 
 const knowledge = readFileSync(new URL("../../docs/KNOWLEDGE.md", import.meta.url), "utf8");
 const sources = readFileSync(new URL("../../docs/SOURCES.md", import.meta.url), "utf8");
-const raw12 = knowledge.slice(knowledge.indexOf("## 12. Exposed secrets and source code"));
+const start12 = knowledge.indexOf("## 12. Exposed secrets and source code");
+const end12 = knowledge.indexOf("\n## 13. ", start12);
+const raw12 = knowledge.slice(start12, end12 === -1 ? undefined : end12);
 const section12 = raw12.replace(/`/g, "").replace(/\\"/g, '"');
 
 function blockOf(id: string, text = section12): string {

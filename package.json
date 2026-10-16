@@ -1,6 +1,6 @@
 {
   "name": "ground-truth-seo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A deterministic, cited SEO scanner: every point in the score traces to a rule, every rule to a primary source, every source to a dated verbatim quote.",
   "license": "Apache-2.0",
   "type": "module",

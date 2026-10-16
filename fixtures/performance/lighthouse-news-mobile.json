@@ -1,0 +1,606 @@
+{
+ "lighthouseResult": {
+  "lighthouseVersion": "13.5.0",
+  "finalDisplayedUrl": "https://www.news.example/",
+  "fetchTime": "2026-10-16T18:54:28.938Z",
+  "audits": {
+   "first-contentful-paint": {
+    "id": "first-contentful-paint",
+    "score": 0.01,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 6851.745894999999,
+    "numericUnit": "millisecond"
+   },
+   "largest-contentful-paint": {
+    "id": "largest-contentful-paint",
+    "score": 0,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 11205.96979,
+    "numericUnit": "millisecond"
+   },
+   "total-blocking-time": {
+    "id": "total-blocking-time",
+    "score": 0.01,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 3922.499999999999,
+    "numericUnit": "millisecond"
+   },
+   "cumulative-layout-shift": {
+    "id": "cumulative-layout-shift",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 0,
+    "numericUnit": "unitless",
+    "details": {
+     "type": "debugdata",
+     "items": [
+      {
+       "cumulativeLayoutShiftMainFrame": 0,
+       "newEngineResult": {
+        "cumulativeLayoutShift": 0,
+        "cumulativeLayoutShiftMainFrame": 0
+       },
+       "newEngineResultDiffered": false
+      }
+     ]
+    }
+   },
+   "speed-index": {
+    "id": "speed-index",
+    "score": 0.34,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 6851.745894999999,
+    "numericUnit": "millisecond"
+   },
+   "lcp-breakdown-insight": {
+    "id": "lcp-breakdown-insight",
+    "score": 0,
+    "scoreDisplayMode": "numeric",
+    "metricSavings": {
+     "LCP": 0
+    },
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": [
+        {
+         "subpart": "timeToFirstByte",
+         "label": "Time to first byte",
+         "duration": 452.69100000023843
+        },
+        {
+         "subpart": "elementRenderDelay",
+         "label": "Element render delay",
+         "duration": 2135.7799999997615
+        }
+       ]
+      },
+      {
+       "type": "node",
+       "selector": "body.layout > div > div > p",
+       "snippet": "<p autofocus=\"\" lang=\"en\" role=\"document\" aria-labelledby=\"\" aria-describedby=\"\" style=\"color: rgb(12, 12, 12); direction: ltr; font-size: 16px; font-weight: 400;\">",
+       "nodeLabel": "By clicking \"Agree\", you agree to the Terms of Use and to the collection and us\u2026"
+      }
+     ]
+    }
+   },
+   "lcp-discovery-insight": {
+    "id": "lcp-discovery-insight",
+    "score": null,
+    "scoreDisplayMode": "notApplicable"
+   },
+   "render-blocking-insight": {
+    "id": "render-blocking-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "font-display-insight": {
+    "id": "font-display-insight",
+    "score": 0,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 50,
+     "INP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": [
+      {
+       "url": "https://www.news.example/fonts/news/noto_serif-v1.woff2",
+       "wastedMs": 70
+      }
+     ]
+    }
+   },
+   "document-latency-insight": {
+    "id": "document-latency-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "checklist",
+     "items": {
+      "noRedirects": {
+       "label": "Avoids redirects",
+       "value": true
+      },
+      "serverResponseIsFast": {
+       "label": "Server responds quickly (observed 59 ms)",
+       "value": true
+      },
+      "usesCompression": {
+       "label": "Applies text compression",
+       "value": true
+      }
+     },
+     "debugData": {
+      "type": "debugdata",
+      "redirectDuration": 0,
+      "serverResponseTime": 59,
+      "uncompressedResponseBytes": 0,
+      "wastedBytes": 0
+     }
+    }
+   },
+   "long-tasks": {
+    "id": "long-tasks",
+    "score": 1,
+    "scoreDisplayMode": "informative",
+    "metricSavings": {
+     "TBT": 3900
+    },
+    "details": {
+     "type": "table",
+     "items": [
+      {
+       "url": "https://www.news.example/",
+       "duration": 946.9999999999991,
+       "startTime": 7830.872479999999
+      },
+      {
+       "url": "Unattributable",
+       "duration": 845,
+       "startTime": 5273.872479999999
+      },
+      {
+       "url": "https://js.stripe.com/dahlia/stripe.js",
+       "duration": 558,
+       "startTime": 16029.04597
+      },
+      {
+       "url": "https://imasdk.googleapis.com/js/sdkloader/ima3.js",
+       "duration": 556,
+       "startTime": 15199.21373
+      },
+      {
+       "url": "https://www.news.example/",
+       "duration": 378,
+       "startTime": 6787.872479999999
+      },
+      {
+       "url": "https://www.news.example/wbdotp/scripttemplates/202608.1.0/otGPP.js",
+       "duration": 363,
+       "startTime": 19888.573810000005
+      },
+      {
+       "url": "https://cdn.optimizely.com/public/125375509/s/landingprod.js",
+       "duration": 351,
+       "startTime": 9441.872479999998
+      },
+      {
+       "url": "https://www.news.example/",
+       "duration": 329,
+       "startTime": 6118.872479999999
+      },
+      {
+       "url": "https://www.news.example/",
+       "duration": 296,
+       "startTime": 7344.872479999999
+      },
+      {
+       "url": "https://www.news.example/wbdotp/scripttemplates/202608.1.0/otBannerSdk.js",
+       "duration": 294,
+       "startTime": 20251.573810000005
+      },
+      {
+       "url": "https://lightning.news.example/launch/7be62238e4c3/97fa00444124/launch-2878c87af5e3.min.js",
+       "duration": 262,
+       "startTime": 8777.872479999998
+      },
+      {
+       "url": "https://registry.api.news.io/bundles/fave/vendor-ccb335e9/vendor",
+       "duration": 260,
+       "startTime": 18883.072850000004
+      },
+      {
+       "url": "https://www.news.example/",
+       "duration": 238,
+       "startTime": 4665.872479999999
+      },
+      {
+       "url": "https://cdn.optimizely.com/public/125375509/s/landingprod.js",
+       "duration": 191,
+       "startTime": 9039.872479999998
+      },
+      {
+       "url": "https://www.news.example/",
+       "duration": 150,
+       "startTime": 9965.872479999998
+      },
+      {
+       "url": "https://www.news.example/media/sites/js/bundles/news-adfuel-8ae8d4098a63be370b73e0fb383c7daa31aef6bc5d270bbe94ed3ff4e10e4a43.min.js",
+       "duration": 148,
+       "startTime": 10700.110729999999
+      },
+      {
+       "url": "https://registry.api.news.io/bundles/fave/latest-4.x/js",
+       "duration": 125,
+       "startTime": 9271.872479999998
+      },
+      {
+       "url": "https://www.news.example/media/sites/js/bundles/news-adfuel-body-5cb5aa4c17e452a60f10ee22c4943a8b9d955029b03de4bb0dbc5ae160ec8e1e.min.js",
+       "duration": 123,
+       "startTime": 11964.75838
+      },
+      {
+       "url": "https://www.news.example/",
+       "duration": 102,
+       "startTime": 4468.872479999999
+      },
+      {
+       "url": "Unattributable",
+       "duration": 97,
+       "startTime": 4903.872479999999
+      }
+     ]
+    }
+   },
+   "unused-javascript": {
+    "id": "unused-javascript",
+    "score": 0,
+    "scoreDisplayMode": "metricSavings",
+    "numericValue": 1010,
+    "numericUnit": "millisecond",
+    "metricSavings": {
+     "FCP": 1200,
+     "LCP": 1000
+    },
+    "details": {
+     "type": "opportunity",
+     "items": [
+      {
+       "url": "https://registry.api.news.io/bundles/fave/vendor-ccb335e9/vendor",
+       "totalBytes": 362605,
+       "wastedBytes": 361558,
+       "wastedPercent": 99.71132808932549
+      },
+      {
+       "url": "https://js.stripe.com/dahlia/stripe.js",
+       "totalBytes": 276542,
+       "wastedBytes": 203830,
+       "wastedPercent": 73.70660594014903
+      },
+      {
+       "url": "https://www.news.example/",
+       "totalBytes": 245976,
+       "wastedBytes": 170003,
+       "wastedPercent": 69.1135720833641
+      },
+      {
+       "url": "https://imasdk.googleapis.com/js/sdkloader/ima3.js",
+       "totalBytes": 160924,
+       "wastedBytes": 117266,
+       "wastedPercent": 72.87027320009688
+      },
+      {
+       "url": "https://www.news.example/wbdotp/scripttemplates/202608.1.0/otBannerSdk.js",
+       "totalBytes": 126922,
+       "wastedBytes": 71661,
+       "wastedPercent": 56.46103160065065
+      },
+      {
+       "url": "https://cdn.optimizely.com/public/125375509/s/landingprod.js",
+       "totalBytes": 121177,
+       "wastedBytes": 68925,
+       "wastedPercent": 56.87922875882211
+      },
+      {
+       "url": "https://registry.api.news.io/bundles/fave/latest-4.x/js",
+       "totalBytes": 63881,
+       "wastedBytes": 33023,
+       "wastedPercent": 51.69468157854102
+      },
+      {
+       "url": "https://www.news.example/media/sites/js/bundles/news-adfuel-body-5cb5aa4c17e452a60f10ee22c4943a8b9d955029b03de4bb0dbc5ae160ec8e1e.min.js",
+       "totalBytes": 44638,
+       "wastedBytes": 29484,
+       "wastedPercent": 66.05242055302503
+      }
+     ],
+     "overallSavingsMs": 1010,
+     "overallSavingsBytes": 1055750
+    }
+   },
+   "image-delivery-insight": {
+    "id": "image-delivery-insight",
+    "score": 0,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 250
+    },
+    "details": {
+     "type": "table",
+     "items": [
+      {
+       "node": {
+        "type": "node",
+        "selector": "div.image > div.image__container > picture.image__picture > img.image__dam-img",
+        "snippet": "<img src=\"https://media.news.example/api/v1/images/stellar/prod/ap26288829499397.jpg?c=16\u2026\" alt=\"Police tape is placed outside Silver Rail Elementary school, where a shoot\u2026\" class=\"image__dam-img\" onload=\"this.classList.remove('image__dam-img--loading')\" onerror=\"imageLoadError(this)\" height=\"2000\" width=\"3000\" style=\"--image-desktop-url: url(&quot;https://media.news.example/api/v1/images/stellar/prod/\u2026;\" data-img-css-vars=\"--image-desktop-url,--image-desktop-url-2x,--image-desktop-url-3x,--image-\u2026\">",
+        "nodeLabel": "Police tape is placed outside Silver Rail Elementary school, where a shooting t\u2026"
+       },
+       "url": "https://media.news.example/api/v1/images/stellar/prod/ap26288829499397.jpg?c=16x9&q=h_540,w_960,c_fill/f_webp",
+       "totalBytes": 96802,
+       "wastedBytes": 55343,
+       "subItems": {
+        "type": "subitems",
+        "items": [
+         {
+          "reason": "Increasing the image compression factor could improve this image's download size.",
+          "wastedBytes": 10402
+         },
+         {
+          "reason": "This image file is larger than it needs to be (960x540) for its displayed dimensions (665x374). Use responsive images to reduce the image download size.",
+          "wastedBytes": 50352
+         }
+        ]
+       }
+      },
+      {
+       "node": {
+        "type": "node",
+        "selector": "div.image > div.image__container > picture.image__picture > img.image__dam-img",
+        "snippet": "<img src=\"https://media.news.example/api/v1/images/stellar/prod/20261015-alaska-maine-deb\u2026\" alt=\"Troy Jackson from Maine, former Rep. Mary Peltola of Alaska, Sen. Susan Co\u2026\" class=\"image__dam-img\" onload=\"this.classList.remove('image__dam-img--loading')\" onerror=\"imageLoadError(this)\" height=\"900\" width=\"1600\" style=\"--image-desktop-url: url(&quot;https://media.news.example/api/v1/images/stellar/prod/\u2026;\" data-img-css-vars=\"--image-desktop-url,--image-desktop-url-2x,--image-desktop-url-3x,--image-\u2026\">",
+        "nodeLabel": "Troy Jackson from Maine, former Rep. Mary Peltola of Alaska, Sen. Susan Collins\u2026"
+       },
+       "url": "https://media.news.example/api/v1/images/stellar/prod/20261015-alaska-maine-debates.jpg?c=16x9&q=h_540,w_960,c_fill/f_webp",
+       "totalBytes": 54188,
+       "wastedBytes": 28186,
+       "subItems": {
+        "type": "subitems",
+        "items": [
+         {
+          "reason": "This image file is larger than it needs to be (960x540) for its displayed dimensions (665x374). Use responsive images to reduce the image download size.",
+          "wastedBytes": 28186
+         }
+        ]
+       }
+      }
+     ]
+    }
+   },
+   "forced-reflow-insight": {
+    "id": "forced-reflow-insight",
+    "score": 0,
+    "scoreDisplayMode": "numeric",
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": [
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 417,
+          "column": 125985
+         },
+         "reflowTime": 81.548
+        }
+       ]
+      },
+      {
+       "type": "table",
+       "items": [
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 15383,
+          "column": 522
+         },
+         "reflowTime": 4.558
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 14443,
+          "column": 1664
+         },
+         "reflowTime": 1.392
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 15378,
+          "column": 632
+         },
+         "reflowTime": 51.315
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 15379,
+          "column": 1218
+         },
+         "reflowTime": 1.113
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 14466,
+          "column": 1067
+         },
+         "reflowTime": 0.788
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 14466,
+          "column": 598
+         },
+         "reflowTime": 0.948
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 15383,
+          "column": 1827
+         },
+         "reflowTime": 15.79
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 14185,
+          "column": 315
+         },
+         "reflowTime": 3.616
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 15392,
+          "column": 20273
+         },
+         "reflowTime": 2.872
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 14500,
+          "column": 6636
+         },
+         "reflowTime": 23.389
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 416,
+          "column": 96964
+         },
+         "reflowTime": 81.548
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 416,
+          "column": 2630
+         },
+         "reflowTime": 13.933
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 416,
+          "column": 1560
+         },
+         "reflowTime": 1.516
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://registry.api.news.io/bundles/fave/latest-4.x/js",
+          "urlProvider": "network",
+          "line": 0,
+          "column": 66749
+         },
+         "reflowTime": 24.972
+        },
+        {
+         "source": {
+          "type": "source-location",
+          "url": "https://www.news.example/",
+          "urlProvider": "network",
+          "line": 93,
+          "column": 22
+         },
+         "reflowTime": 38.843
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "cls-culprits-insight": {
+    "id": "cls-culprits-insight",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "metricSavings": {
+     "CLS": 0
+    },
+    "details": {
+     "type": "list",
+     "items": []
+    }
+   },
+   "unsized-images": {
+    "id": "unsized-images",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "CLS": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "bf-cache": {
+    "id": "bf-cache",
+    "score": 1,
+    "scoreDisplayMode": "binary"
+   }
+  }
+ }
+}

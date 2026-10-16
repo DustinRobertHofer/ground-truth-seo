@@ -1,0 +1,351 @@
+{
+ "lighthouseResult": {
+  "lighthouseVersion": "13.5.0",
+  "finalDisplayedUrl": "https://www.seoscanner.app/",
+  "fetchTime": "2026-10-16T18:54:28.938Z",
+  "audits": {
+   "first-contentful-paint": {
+    "id": "first-contentful-paint",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 352,
+    "numericUnit": "millisecond"
+   },
+   "largest-contentful-paint": {
+    "id": "largest-contentful-paint",
+    "score": 0.94,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 1010,
+    "numericUnit": "millisecond"
+   },
+   "total-blocking-time": {
+    "id": "total-blocking-time",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 6,
+    "numericUnit": "millisecond"
+   },
+   "cumulative-layout-shift": {
+    "id": "cumulative-layout-shift",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 0.012307821952179665,
+    "numericUnit": "unitless",
+    "details": {
+     "type": "debugdata",
+     "items": [
+      {
+       "cumulativeLayoutShiftMainFrame": 0.012307821952179665,
+       "newEngineResult": {
+        "cumulativeLayoutShift": 0.012307821952179665,
+        "cumulativeLayoutShiftMainFrame": 0.012307821952179665
+       },
+       "newEngineResultDiffered": false
+      }
+     ]
+    }
+   },
+   "speed-index": {
+    "id": "speed-index",
+    "score": 0.93,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 1195.9676858963526,
+    "numericUnit": "millisecond"
+   },
+   "lcp-breakdown-insight": {
+    "id": "lcp-breakdown-insight",
+    "score": 0,
+    "scoreDisplayMode": "numeric",
+    "metricSavings": {
+     "LCP": 0
+    },
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": [
+        {
+         "subpart": "timeToFirstByte",
+         "label": "Time to first byte",
+         "duration": 449.776
+        },
+        {
+         "subpart": "elementRenderDelay",
+         "label": "Element render delay",
+         "duration": 3051.529
+        }
+       ]
+      },
+      {
+       "type": "node",
+       "selector": "section.radar-grid > div.mx-auto > div.reveal > div.ink-panel",
+       "snippet": "<div class=\"ink-panel grain relative overflow-hidden rounded-[28px] shadow-lift ring-1\u2026\" aria-label=\"An example report\">",
+       "nodeLabel": "TECHNICAL REPORT\n\nwww.example.com\n\n71\nOF 100\nTO FIX\n2\nTO ADD\n1\nIN PLACE\n2\nPass\n\u2026"
+      }
+     ]
+    }
+   },
+   "lcp-discovery-insight": {
+    "id": "lcp-discovery-insight",
+    "score": null,
+    "scoreDisplayMode": "notApplicable"
+   },
+   "render-blocking-insight": {
+    "id": "render-blocking-insight",
+    "score": 0.5,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": [
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/11hcqnjr-5rry.css",
+       "totalBytes": 17798
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0o~1o4bxqjwbm.css",
+       "totalBytes": 1420
+      }
+     ]
+    }
+   },
+   "font-display-insight": {
+    "id": "font-display-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "INP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "document-latency-insight": {
+    "id": "document-latency-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "checklist",
+     "items": {
+      "noRedirects": {
+       "label": "Avoids redirects",
+       "value": true
+      },
+      "serverResponseIsFast": {
+       "label": "Server responds quickly (observed 49 ms)",
+       "value": true
+      },
+      "usesCompression": {
+       "label": "Applies text compression",
+       "value": true
+      }
+     },
+     "debugData": {
+      "type": "debugdata",
+      "redirectDuration": 0,
+      "serverResponseTime": 49,
+      "uncompressedResponseBytes": 0,
+      "wastedBytes": 0
+     }
+    }
+   },
+   "long-tasks": {
+    "id": "long-tasks",
+    "score": 1,
+    "scoreDisplayMode": "informative",
+    "metricSavings": {
+     "TBT": 0
+    },
+    "details": {
+     "type": "table",
+     "items": [
+      {
+       "url": "https://www.seoscanner.app/",
+       "duration": 65,
+       "startTime": 333
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0kb5zohddv66-.js",
+       "duration": 56,
+       "startTime": 778
+      }
+     ]
+    }
+   },
+   "unused-javascript": {
+    "id": "unused-javascript",
+    "score": 0,
+    "scoreDisplayMode": "metricSavings",
+    "numericValue": 160,
+    "numericUnit": "millisecond",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 150
+    },
+    "details": {
+     "type": "opportunity",
+     "items": [
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/16vtkz9ddle6l.js",
+       "totalBytes": 101498,
+       "wastedBytes": 79751,
+       "wastedPercent": 78.57461590812208
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0kb5zohddv66-.js",
+       "totalBytes": 72402,
+       "wastedBytes": 24973,
+       "wastedPercent": 34.49268483482098
+      }
+     ],
+     "overallSavingsMs": 160,
+     "overallSavingsBytes": 104724
+    }
+   },
+   "image-delivery-insight": {
+    "id": "image-delivery-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "forced-reflow-insight": {
+    "id": "forced-reflow-insight",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": []
+      }
+     ]
+    }
+   },
+   "cls-culprits-insight": {
+    "id": "cls-culprits-insight",
+    "score": 1,
+    "scoreDisplayMode": "informative",
+    "metricSavings": {
+     "CLS": 0
+    },
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": [
+        {
+         "node": {
+          "type": "text",
+          "value": "Total"
+         },
+         "score": 3.7928753742259185e-06
+        },
+        {
+         "node": {
+          "type": "node",
+          "selector": "div.mt-5 > div.relative > div.absolute > span.display-num",
+          "snippet": "<span class=\"display-num text-3xl text-ink-foreground\">",
+          "nodeLabel": "71"
+         },
+         "score": 3.7928753742259185e-06
+        }
+       ]
+      },
+      {
+       "type": "table",
+       "items": [
+        {
+         "node": {
+          "type": "text",
+          "value": "Total"
+         },
+         "score": 0.012307821952179665
+        },
+        {
+         "node": {
+          "type": "node",
+          "selector": "main.flex > section.radar-grid > div.mx-auto > div.reveal",
+          "snippet": "<div class=\"reveal mx-auto w-full max-w-lg lg:max-w-none\" style=\"--i:3\">",
+          "nodeLabel": "TECHNICAL REPORT\n\nwww.example.com\n\n71\nOF 100\nTO FIX\n2\nTO ADD\n1\nIN PLACE\n2\nPass\n\u2026"
+         },
+         "score": 0.0030795313830458758
+        },
+        {
+         "node": {
+          "type": "node",
+          "selector": "main.flex > section.radar-grid > div.mx-auto > div.reveal",
+          "snippet": "<div class=\"reveal mx-auto w-full max-w-lg lg:max-w-none\" style=\"--i:3\">",
+          "nodeLabel": "TECHNICAL REPORT\n\nwww.example.com\n\n71\nOF 100\nTO FIX\n2\nTO ADD\n1\nIN PLACE\n2\nPass\n\u2026"
+         },
+         "score": 0.0030153296456168974
+        },
+        {
+         "node": {
+          "type": "node",
+          "selector": "main.flex > section.radar-grid > div.mx-auto > div.reveal",
+          "snippet": "<div class=\"reveal mx-auto w-full max-w-lg lg:max-w-none\" style=\"--i:3\">",
+          "nodeLabel": "TECHNICAL REPORT\n\nwww.example.com\n\n71\nOF 100\nTO FIX\n2\nTO ADD\n1\nIN PLACE\n2\nPass\n\u2026"
+         },
+         "score": 0.0023497379411284544
+        },
+        {
+         "node": {
+          "type": "node",
+          "selector": "main.flex > section.radar-grid > div.mx-auto > div.reveal",
+          "snippet": "<div class=\"reveal mx-auto w-full max-w-lg lg:max-w-none\" style=\"--i:3\">",
+          "nodeLabel": "TECHNICAL REPORT\n\nwww.example.com\n\n71\nOF 100\nTO FIX\n2\nTO ADD\n1\nIN PLACE\n2\nPass\n\u2026"
+         },
+         "score": 0.0022813299954067695
+        },
+        {
+         "node": {
+          "type": "node",
+          "selector": "main.flex > section.radar-grid > div.mx-auto > div.reveal",
+          "snippet": "<div class=\"reveal mx-auto w-full max-w-lg lg:max-w-none\" style=\"--i:3\">",
+          "nodeLabel": "TECHNICAL REPORT\n\nwww.example.com\n\n71\nOF 100\nTO FIX\n2\nTO ADD\n1\nIN PLACE\n2\nPass\n\u2026"
+         },
+         "score": 0.0015818929869816686
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "unsized-images": {
+    "id": "unsized-images",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "CLS": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "bf-cache": {
+    "id": "bf-cache",
+    "score": 1,
+    "scoreDisplayMode": "binary"
+   }
+  }
+ }
+}

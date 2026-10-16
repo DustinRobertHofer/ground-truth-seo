@@ -60,6 +60,18 @@ export const SOURCES: Source[] = [
   // Chrome and web.dev
   { id: "WEBDEV-VITALS", title: "Web Vitals", url: "https://web.dev/articles/vitals", last_updated: "2024-10-31", verified: "2026-10-03", group: "Chrome and web.dev" },
   { id: "CRUX-METHOD", title: "CrUX methodology", url: "https://developer.chrome.com/docs/crux/methodology", last_updated: "2024-06-20", verified: "2026-10-03", group: "Chrome and web.dev" },
+  { id: "WEBDEV-LCP", title: "Largest Contentful Paint (LCP)", url: "https://web.dev/articles/lcp", last_updated: "2025-09-04", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-INP", title: "Interaction to Next Paint (INP)", url: "https://web.dev/articles/inp", last_updated: "2025-09-02", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-CLS", title: "Cumulative Layout Shift (CLS)", url: "https://web.dev/articles/cls", last_updated: "2023-04-12", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-FCP", title: "First Contentful Paint (FCP)", url: "https://web.dev/articles/fcp", last_updated: "2023-12-06", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-TTFB", title: "Time to First Byte (TTFB)", url: "https://web.dev/articles/ttfb", last_updated: "2025-11-28", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-THRESHOLDS", title: "How the Core Web Vitals metrics thresholds were defined", url: "https://web.dev/articles/defining-core-web-vitals-thresholds", last_updated: "2025-05-07", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-OPT-LCP", title: "Optimize Largest Contentful Paint", url: "https://web.dev/articles/optimize-lcp", last_updated: "2025-03-31", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-OPT-INP", title: "Optimize Interaction to Next Paint", url: "https://web.dev/articles/optimize-inp", last_updated: "2025-09-02", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-OPT-CLS", title: "Optimize Cumulative Layout Shift", url: "https://web.dev/articles/optimize-cls", last_updated: "2025-02-07", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "WEBDEV-OPT-TTFB", title: "Optimize Time to First Byte", url: "https://web.dev/articles/optimize-ttfb", last_updated: "2025-11-28", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "CRUX-METRICS", title: "CrUX metrics", url: "https://developer.chrome.com/docs/crux/methodology/metrics", last_updated: "2026-10-13", verified: "2026-10-16", group: "Chrome and web.dev" },
+  { id: "PSI-ABOUT", title: "About PageSpeed Insights", url: "https://developers.google.com/speed/docs/insights/v5/about", last_updated: "2024-10-21", verified: "2026-10-16", group: "Chrome and web.dev" },
   // Microsoft Bing
   { id: "MS-BING-RANK", title: "How Bing delivers search results (Microsoft Support)", url: "https://support.microsoft.com/en-us/topic/how-bing-delivers-search-results-d18fc815-ac37-4723-bc67-9229ce3eb6a3", last_updated: "March 2025", verified: "2026-10-03", group: "Microsoft Bing" },
   { id: "B-ROBOTS-2012", title: "To crawl or not to crawl, that is BingBot's question", url: "https://blogs.bing.com/webmaster/May-2012/To-crawl-or-not-to-crawl,-that-is-BingBot-s-questi", last_updated: "posted 2012-05-03", verified: "2026-10-03", group: "Microsoft Bing" },

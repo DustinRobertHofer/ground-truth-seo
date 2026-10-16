@@ -1,0 +1,356 @@
+{
+ "lighthouseResult": {
+  "lighthouseVersion": "13.5.0",
+  "finalDisplayedUrl": "https://www.seoscanner.app/",
+  "fetchTime": "2026-10-16T18:38:22.961Z",
+  "audits": {
+   "first-contentful-paint": {
+    "id": "first-contentful-paint",
+    "score": 0.98,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 1279.357,
+    "numericUnit": "millisecond"
+   },
+   "largest-contentful-paint": {
+    "id": "largest-contentful-paint",
+    "score": 0.62,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 3542.357,
+    "numericUnit": "millisecond"
+   },
+   "total-blocking-time": {
+    "id": "total-blocking-time",
+    "score": 0.79,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 299.5,
+    "numericUnit": "millisecond"
+   },
+   "cumulative-layout-shift": {
+    "id": "cumulative-layout-shift",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 0.0010514691294490307,
+    "numericUnit": "unitless",
+    "details": {
+     "type": "debugdata",
+     "items": [
+      {
+       "cumulativeLayoutShiftMainFrame": 0.0010514691294490307,
+       "newEngineResult": {
+        "cumulativeLayoutShift": 0.0010514691294490307,
+        "cumulativeLayoutShiftMainFrame": 0.0010514691294490307
+       },
+       "newEngineResultDiffered": false
+      }
+     ]
+    }
+   },
+   "speed-index": {
+    "id": "speed-index",
+    "score": 0.99,
+    "scoreDisplayMode": "numeric",
+    "numericValue": 2298.678824403719,
+    "numericUnit": "millisecond"
+   },
+   "lcp-breakdown-insight": {
+    "id": "lcp-breakdown-insight",
+    "score": 1,
+    "scoreDisplayMode": "informative",
+    "metricSavings": {
+     "LCP": 0
+    },
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": [
+        {
+         "subpart": "timeToFirstByte",
+         "label": "Time to first byte",
+         "duration": 411.797
+        },
+        {
+         "subpart": "resourceLoadDelay",
+         "label": "Resource load delay",
+         "duration": 180.234
+        },
+        {
+         "subpart": "resourceLoadDuration",
+         "label": "Resource load duration",
+         "duration": 135.6969999999702
+        },
+        {
+         "subpart": "elementRenderDelay",
+         "label": "Element render delay",
+         "duration": 245.1350000000298
+        }
+       ]
+      },
+      {
+       "type": "node",
+       "selector": "div.mx-auto > a.inline-flex > span.inline-flex > img.dark:hidden",
+       "snippet": "<img src=\"/logo/seoscanner-mark.svg\" alt=\"\" width=\"32\" height=\"32\" class=\"dark:hidden size-8\">",
+       "nodeLabel": "div.mx-auto > a.inline-flex > span.inline-flex > img.dark:hidden"
+      }
+     ]
+    }
+   },
+   "lcp-discovery-insight": {
+    "id": "lcp-discovery-insight",
+    "score": 0,
+    "scoreDisplayMode": "numeric",
+    "metricSavings": {
+     "LCP": 0
+    },
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "checklist",
+       "items": {
+        "priorityHinted": {
+         "label": "fetchpriority=high should be applied to the image preload request",
+         "value": false
+        },
+        "requestDiscoverable": {
+         "label": "Request is discoverable in initial document",
+         "value": true
+        },
+        "eagerlyLoaded": {
+         "label": "LCP resources should not use loading=lazy",
+         "value": true
+        }
+       }
+      },
+      {
+       "type": "node",
+       "selector": "div.mx-auto > a.inline-flex > span.inline-flex > img.dark:hidden",
+       "snippet": "<img src=\"/logo/seoscanner-mark.svg\" alt=\"\" width=\"32\" height=\"32\" class=\"dark:hidden size-8\">",
+       "nodeLabel": "div.mx-auto > a.inline-flex > span.inline-flex > img.dark:hidden"
+      }
+     ]
+    }
+   },
+   "render-blocking-insight": {
+    "id": "render-blocking-insight",
+    "score": 0.5,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": [
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/11hcqnjr-5rry.css",
+       "totalBytes": 18204,
+       "wastedMs": 150
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0o~1o4bxqjwbm.css",
+       "totalBytes": 1369
+      }
+     ]
+    }
+   },
+   "font-display-insight": {
+    "id": "font-display-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "INP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "document-latency-insight": {
+    "id": "document-latency-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "checklist",
+     "items": {
+      "noRedirects": {
+       "label": "Avoids redirects",
+       "value": true
+      },
+      "serverResponseIsFast": {
+       "label": "Server responds quickly (observed 50 ms)",
+       "value": true
+      },
+      "usesCompression": {
+       "label": "Applies text compression",
+       "value": true
+      }
+     },
+     "debugData": {
+      "type": "debugdata",
+      "redirectDuration": 0,
+      "serverResponseTime": 50,
+      "uncompressedResponseBytes": 0,
+      "wastedBytes": 0
+     }
+    }
+   },
+   "long-tasks": {
+    "id": "long-tasks",
+    "score": 1,
+    "scoreDisplayMode": "informative",
+    "metricSavings": {
+     "TBT": 300
+    },
+    "details": {
+     "type": "table",
+     "items": [
+      {
+       "url": "https://www.seoscanner.app/",
+       "duration": 298,
+       "startTime": 1137.357
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0kb5zohddv66-.js",
+       "duration": 169,
+       "startTime": 3659.357
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/17nmx~lprzd~s.js",
+       "duration": 165,
+       "startTime": 2867.357
+      },
+      {
+       "url": "Unattributable",
+       "duration": 156,
+       "startTime": 917.357
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0kb5zohddv66-.js",
+       "duration": 66,
+       "startTime": 3848.357
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0kb5zohddv66-.js",
+       "duration": 61,
+       "startTime": 2660.357
+      }
+     ]
+    }
+   },
+   "unused-javascript": {
+    "id": "unused-javascript",
+    "score": 0,
+    "scoreDisplayMode": "metricSavings",
+    "numericValue": 150,
+    "numericUnit": "millisecond",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 150
+    },
+    "details": {
+     "type": "opportunity",
+     "items": [
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/16vtkz9ddle6l.js",
+       "totalBytes": 101498,
+       "wastedBytes": 79751,
+       "wastedPercent": 78.57461590812208
+      },
+      {
+       "url": "https://www.seoscanner.app/_next/static/chunks/0kb5zohddv66-.js",
+       "totalBytes": 72402,
+       "wastedBytes": 24955,
+       "wastedPercent": 34.46675544187641
+      }
+     ],
+     "overallSavingsMs": 150,
+     "overallSavingsBytes": 104706
+    }
+   },
+   "image-delivery-insight": {
+    "id": "image-delivery-insight",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "FCP": 0,
+     "LCP": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "forced-reflow-insight": {
+    "id": "forced-reflow-insight",
+    "score": 1,
+    "scoreDisplayMode": "numeric",
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": []
+      }
+     ]
+    }
+   },
+   "cls-culprits-insight": {
+    "id": "cls-culprits-insight",
+    "score": 1,
+    "scoreDisplayMode": "informative",
+    "metricSavings": {
+     "CLS": 0
+    },
+    "details": {
+     "type": "list",
+     "items": [
+      {
+       "type": "table",
+       "items": [
+        {
+         "node": {
+          "type": "text",
+          "value": "Total"
+         },
+         "score": 0.0010514691294490307
+        },
+        {
+         "node": {
+          "type": "node",
+          "selector": "body.flex > header.sticky > div.mx-auto > div.ml-auto",
+          "snippet": "<div class=\"ml-auto flex items-center gap-2\">",
+          "nodeLabel": "Sign in"
+         },
+         "score": 0.0010514691294490307
+        }
+       ]
+      }
+     ]
+    }
+   },
+   "unsized-images": {
+    "id": "unsized-images",
+    "score": 1,
+    "scoreDisplayMode": "metricSavings",
+    "metricSavings": {
+     "CLS": 0
+    },
+    "details": {
+     "type": "table",
+     "items": []
+    }
+   },
+   "bf-cache": {
+    "id": "bf-cache",
+    "score": 1,
+    "scoreDisplayMode": "binary"
+   }
+  }
+ }
+}

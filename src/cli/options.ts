@@ -172,6 +172,15 @@ export const CLI_OPTIONS: readonly CliOption[] = [
     needs: "CRUX_API_KEY",
   },
   {
+    flag: "--performance",
+    value: null,
+    commands: ["scan"],
+    help: "Diagnose home page performance after the scan (needs PAGESPEED_API_KEY or CRUX_API_KEY)",
+    description:
+      "After the scan, reads Chrome UX Report field data for the home page (with CRUX_API_KEY) and runs Lighthouse on it through PageSpeed Insights, on mobile and desktop (with PAGESPEED_API_KEY, or CRUX_API_KEY when its project has that API enabled). Writes performance.json and performance.md: all five web vitals, the LCP breakdown, and diagnostics with recommendations and their sources. Advisory: it never changes the score or report.json, and shows no Lighthouse score.",
+    needs: "PAGESPEED_API_KEY",
+  },
+  {
     flag: "--review",
     value: null,
     commands: ["scan"],
@@ -187,11 +196,19 @@ export const CLI_OPTIONS: readonly CliOption[] = [
 export const CLI_ENV: readonly CliEnvVar[] = [
   {
     name: "CRUX_API_KEY",
-    description: "A Chrome UX Report API key, required by --crux.",
+    description: "A Chrome UX Report API key, required by --crux, and the field data of --performance.",
     secret: true,
     obtain:
       "In the Google Cloud console, choose or create a project, enable the Chrome UX Report API, then create an API key under APIs & Services > Credentials and restrict it to that API.",
     docsUrl: "https://developer.chrome.com/docs/crux/api",
+  },
+  {
+    name: "PAGESPEED_API_KEY",
+    description: "A PageSpeed Insights API key for the lab run of --performance. Without it, --performance uses CRUX_API_KEY.",
+    secret: true,
+    obtain:
+      "In the Google Cloud console, enable the PageSpeed Insights API in the same project as the Chrome UX Report API (the CRUX_API_KEY then works for both), or create a separate API key restricted to it under APIs & Services > Credentials.",
+    docsUrl: "https://developers.google.com/speed/docs/insights/v5/get-started",
   },
   {
     name: "AI_GATEWAY_API_KEY",
@@ -217,6 +234,11 @@ export const CLI_OUTPUTS: readonly CliOutput[] = [
   },
   { file: "review.json", description: "The advisory review (with --review or review). Never part of the report or the score." },
   { file: "review.md", description: "A readable view of the review." },
+  {
+    file: "performance.json",
+    description: "With --performance: the stored field data and lab runs of the home page and the diagnostics built from them. Never part of the report or the score.",
+  },
+  { file: "performance.md", description: "A readable view of the performance diagnostics." },
   { file: "SKILL.md", description: "The agent skill (skill command): how a coding agent installs, runs and reads the command line." },
 ];
 

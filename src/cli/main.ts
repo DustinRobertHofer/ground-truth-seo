@@ -2,14 +2,15 @@
  * The command line: scan a site, evaluate a stored snapshot, review its content,
  * or diff two reports.
  *
- *   ground-truth-seo scan <url> [--max-pages 50] [--out dir] [--review] [--crux]
+ *   ground-truth-seo scan <url> [--max-pages 50] [--out dir] [--review] [--crux] [--performance]
  *   ground-truth-seo evaluate <snapshot.json> [--out dir] [--engines google]
  *   ground-truth-seo review <snapshot.json> [--review-pages 6] [--queries "a;b"] [--queries-file f]
  *   ground-truth-seo diff <before/report.json> <after/report.json>
  *   ground-truth-seo skill [--out .claude/skills/ground-truth-seo]
  *
  * Configuration comes from flags and plain environment variables only:
- * CRUX_API_KEY for --crux, AI_GATEWAY_API_KEY and AI_REVIEW_MODEL for --review,
+ * CRUX_API_KEY for --crux, PAGESPEED_API_KEY (or CRUX_API_KEY) for --performance,
+ * AI_GATEWAY_API_KEY and AI_REVIEW_MODEL for --review,
  * and AI_REVIEW_DISABLED=1 to turn the review off. No .env file is read. Keys
  * never enter a snapshot, a report or anything this command prints.
  */
@@ -19,6 +20,8 @@ import { dirname, join } from "node:path";
 import { extractContent } from "../content-review/extract.js";
 import { renderReviewMarkdown } from "../content-review/markdown.js";
 import { aiReviewConfigured, reviewContent } from "../content-review/review.js";
+import { renderPerformanceMarkdown } from "../performance/markdown.js";
+import { homePageOfOrigin, performanceConfigured, runPerformance } from "../performance/run.js";
 import { cruxApiKey, cruxApiProvider, evaluateSnapshot, scan, type ScanConfigInput, type ScanResult } from "../scanner/index.js";
 import { resolveConfig, type ScanConfig } from "../scanner/config.js";
 import { SCANNER_VERSION } from "../scanner/evaluate/index.js";
@@ -32,7 +35,7 @@ import { SKILL_DEFAULT_DIR, SKILL_FILE, skillMarkdown } from "../skill/skill.js"
 import { usageText } from "./options.js";
 
 /** Environment variables whose values must never be printed or written. */
-export const SECRET_ENV = ["CRUX_API_KEY", "AI_GATEWAY_API_KEY", "VERCEL_OIDC_TOKEN"] as const;
+export const SECRET_ENV = ["CRUX_API_KEY", "PAGESPEED_API_KEY", "AI_GATEWAY_API_KEY", "VERCEL_OIDC_TOKEN"] as const;
 
 export interface CliIo {
   stdout: (text: string) => void;
@@ -131,6 +134,17 @@ async function writeReview(dir: string, snapshot: Snapshot, config: ScanConfig, 
   io.stdout(`AI review of ${reviewed} of ${review.pages.length} pages written to ${dir}/review.md (${review.usage.inputTokens} input and ${review.usage.outputTokens} output tokens)\n`);
 }
 
+/** PRODUCT.md §22: the home page performance diagnostics, written beside the report and never into it. */
+async function writePerformance(dir: string, snapshot: Snapshot, io: CliIo): Promise<void> {
+  const file = await runPerformance(homePageOfOrigin(snapshot.preferred_origin), { onProgress: (m) => io.stderr(`${m}\n`) });
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "performance.json"), redactSecrets(`${JSON.stringify(file, null, 2)}\n`));
+  writeFileSync(join(dir, "performance.md"), redactSecrets(renderPerformanceMarkdown(file.result)));
+  const runs = file.input.lab.runs.filter((r) => r.status === "ok").length;
+  const fields = file.input.field.devices.filter((d) => d.status === "ok").length;
+  io.stdout(`Performance diagnostics (${fields} field records, ${runs} lab runs, ${file.result.diagnostics.length} diagnostics) written to ${dir}/performance.md\n`);
+}
+
 export interface RunHooks {
   /** Called after a scan's files are written; the website uses it to record research observations. */
   afterScan?: (result: ScanResult) => Promise<void>;
@@ -151,16 +165,21 @@ export async function run(argv: string[], io: CliIo, hooks: RunHooks = {}): Prom
   }
   if (command === "scan") {
     const url = positional[0];
-    if (!url) throw new UsageError("usage: scan <url> [--max-pages N] [--out dir] [--review] [--crux]");
+    if (!url) throw new UsageError("usage: scan <url> [--max-pages N] [--out dir] [--review] [--crux] [--performance]");
     const config = configFromFlags(url, flags);
     const cruxKey = cruxApiKey();
     if (config.crux && !cruxKey) throw new UsageError("--crux needs CRUX_API_KEY in the environment");
     if (flags.review === true) assertReviewAvailable();
+    if (flags.performance === true) {
+      const available = performanceConfigured();
+      if (!available.field && !available.lab) throw new UsageError("--performance needs PAGESPEED_API_KEY or CRUX_API_KEY in the environment");
+    }
     const result = await scan(config, { onProgress: (m) => io.stderr(`${m}\n`), crux: config.crux && cruxKey ? cruxApiProvider(cruxKey) : undefined });
     const dir = typeof flags.out === "string" ? flags.out : `scan-${new URL(result.config.start_url).hostname}`;
     write(dir, result.report, result.reportJson, result.snapshot);
     io.stdout(`${result.report.headline.arithmetic}\n${result.report.headline.summary}\nWritten to ${dir}/ (snapshot ${result.snapshot.snapshot_id})\n`);
     if (hooks.afterScan) await hooks.afterScan(result);
+    if (flags.performance === true) await writePerformance(dir, result.snapshot, io);
     if (flags.review === true) await writeReview(dir, result.snapshot, result.config, flags, io);
     return;
   }

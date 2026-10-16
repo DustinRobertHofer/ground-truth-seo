@@ -88,6 +88,7 @@ Writes `SKILL.md`, the agent skill, to `.claude/skills/ground-truth-seo` (where 
 | `--house-conventions` | scan, evaluate | Enables the `-HC` house-convention rules, which carry zero weight. |
 | `--third-party-resources` | scan, evaluate | Extends `SEO-ROBOTS-05B` to resources on other origins. |
 | `--crux` | scan | Ask the Chrome UX Report API for field data for the origin and home page, on phones and desktops, judged by `SEO-PERF-01`. Needs `CRUX_API_KEY`. |
+| `--performance` | scan | After the scan, diagnose the home page's performance: Chrome UX Report field data for all five web vitals (with `CRUX_API_KEY`) and one Lighthouse run per device class through PageSpeed Insights (with `PAGESPEED_API_KEY`, or `CRUX_API_KEY`), with the LCP breakdown and diagnostics that quote their sources. Writes `performance.json` and `performance.md`. Advisory: never part of the score, and no Lighthouse score is shown (`docs/PRODUCT.md` §22). |
 | `--review` | scan | Run the advisory AI review after the scan. Needs `AI_GATEWAY_API_KEY`. |
 | `--review-pages <n>` | scan, review | Pages to review (default 6, at most 20). |
 | `--queries "<a;b>"` | scan, review | Searches the pages should answer, separated by `;`. |
@@ -103,6 +104,7 @@ The specification also describes a rendered mode (headless Chromium) and a mobil
 | `report.md` | A readable view rendered from `report.json`. |
 | `snapshot.json` | Everything the scan fetched: every request and response, content-addressed bodies (SHA-256, base64), DNS and TLS records, and the single clock reading. Its `snapshot_id` is the SHA-256 of its canonical manifest, so two reports can be compared knowing whether their inputs differed. API keys never enter it. |
 | `review.json`, `review.md` | Only with `--review` or `review`: the advisory review. Never part of the report or the score. |
+| `performance.json`, `performance.md` | Only with `--performance`: the home page's field data and lab runs as acquired, and the diagnostics built from them (`docs/KNOWLEDGE.md` §13). Never part of the report or the score. |
 | `SKILL.md` | Only with `skill`: the agent skill. |
 
 ## Determinism
@@ -117,7 +119,8 @@ The command line reads plain environment variables. It does not load `.env` file
 
 | Variable | Effect |
 | --- | --- |
-| `CRUX_API_KEY` | A Chrome UX Report API key, required by `--crux`. |
+| `CRUX_API_KEY` | A Chrome UX Report API key, required by `--crux`, and the field data of `--performance`. |
+| `PAGESPEED_API_KEY` | A PageSpeed Insights API key for the lab runs of `--performance`. Without it, `--performance` uses `CRUX_API_KEY`. |
 | `AI_GATEWAY_API_KEY` | A [Vercel AI Gateway](https://vercel.com/ai-gateway) API key, required by `--review` and `review`. It works anywhere; no Vercel project or deployment is needed. |
 | `AI_REVIEW_MODEL` | The Gateway model ID for the review (default `anthropic/claude-sonnet-5.5`). |
 | `AI_REVIEW_DISABLED` | Set to `1` to turn the review off. |
@@ -125,9 +128,10 @@ The command line reads plain environment variables. It does not load `.env` file
 To get the keys:
 
 - `CRUX_API_KEY`: in the Google Cloud console, choose or create a project, enable the Chrome UX Report API, then create an API key under APIs & Services > Credentials and restrict it to that API ([documentation](https://developer.chrome.com/docs/crux/api)).
+- `PAGESPEED_API_KEY`: enable the PageSpeed Insights API in the same Google Cloud project, and the `CRUX_API_KEY` works for both; or create a separate key restricted to it ([documentation](https://developers.google.com/speed/docs/insights/v5/get-started)).
 - `AI_GATEWAY_API_KEY`: in the Vercel dashboard, open AI Gateway, then API Keys, and choose Create key ([documentation](https://vercel.com/docs/ai-gateway/authentication)).
 
-Set them in your shell profile (`export CRUX_API_KEY=...` in `~/.zshrc` or `~/.bashrc`, `setx CRUX_API_KEY ...` on Windows) or as CI secrets. Keys never enter a snapshot, a report, a review file or anything the command prints; as a last line of defense the command line redacts their values from its output.
+Set them in your shell profile (`export CRUX_API_KEY=...` in `~/.zshrc` or `~/.bashrc`, `setx CRUX_API_KEY ...` on Windows) or as CI secrets. Keys never enter a snapshot, a report, a review or performance file or anything the command prints; as a last line of defense the command line redacts their values from its output.
 
 A review costs one model call per sampled page plus one for the site (about $0.05 to $0.10 per page with the default model).
 
