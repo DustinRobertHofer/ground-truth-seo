@@ -3,7 +3,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { redactSecrets, run, USAGE, type CliIo } from "./main.js";
+import { redactSecrets, run, SECRET_ENV, USAGE, type CliIo } from "./main.js";
+import { CLI_ENV, CLI_OPTIONS } from "./options.js";
 
 const golden = new URL("../../fixtures/golden/broken-links/", import.meta.url);
 
@@ -79,5 +80,16 @@ describe("command line", () => {
     const env = { CRUX_API_KEY: "crux-secret-123", AI_GATEWAY_API_KEY: "gw-secret-456" };
     expect(redactSecrets("GET https://x/?key=crux-secret-123 with gw-secret-456", env)).toBe("GET https://x/?key=[CRUX_API_KEY] with [AI_GATEWAY_API_KEY]");
     expect(redactSecrets("nothing to hide", {})).toBe("nothing to hide");
+  });
+
+  it("documents exactly the flags it reads, and redacts every secret it documents", () => {
+    const source = readFileSync(new URL("./main.ts", import.meta.url), "utf8");
+    const read = new Set(
+      [...source.matchAll(/\b(?:str|num|list)\("([a-z-]+)"\)|flags\["([a-z-]+)"\]|flags\.([a-z]+)\b/g)].map((m) => m[1] ?? m[2] ?? m[3]),
+    );
+    read.delete("help");
+    expect([...read].sort()).toEqual(CLI_OPTIONS.map((o) => o.flag.slice(2)).sort());
+    for (const o of CLI_OPTIONS) expect(USAGE, o.flag).toContain(o.flag);
+    for (const e of CLI_ENV.filter((v) => v.secret)) expect(SECRET_ENV as readonly string[]).toContain(e.name);
   });
 });

@@ -27,6 +27,7 @@ import type { Report } from "../scanner/report/types.js";
 import { KNOWLEDGE_CUTOFF, RULESET_VERSION } from "../scanner/rules/index.js";
 import { canonicalize } from "../scanner/snapshot/canonical-json.js";
 import type { Snapshot } from "../scanner/snapshot/types.js";
+import { usageText } from "./options.js";
 
 /** Environment variables whose values must never be printed or written. */
 export const SECRET_ENV = ["CRUX_API_KEY", "AI_GATEWAY_API_KEY", "VERCEL_OIDC_TOKEN"] as const;
@@ -38,38 +39,7 @@ export interface CliIo {
 
 export class UsageError extends Error {}
 
-export const USAGE = `Usage: ground-truth-seo <command> [options]
-
-Commands:
-  scan <url>                  Crawl a site, then write report.json, report.md and snapshot.json
-  evaluate <snapshot.json>    Evaluate a stored snapshot again and write report.json and report.md
-  review <snapshot.json>      Run the advisory AI review of a stored snapshot (review.json, review.md)
-  diff <before> <after>       Compare two report.json files; prints canonical JSON
-
-Options (scan and evaluate; evaluate needs the same configuration flags as the scan to reproduce its report):
-  --out <dir>                 Output directory (scan: scan-<host>, evaluate: ., review: beside the snapshot)
-  --max-pages <n>             Page budget (default 500)
-  --max-depth <n>             Link depth (default 20)
-  --max-extra-fetches <n>     Canonical, alternate and redirect targets (default 500)
-  --engines <list>            Comma-separated: google,bing (default both)
-  --include <patterns>        Comma-separated path globs that shape the intended pages
-  --exclude <patterns>        Comma-separated path globs to leave out
-  --additional-origins <list> Extra origins treated as in scope
-  --staging-hosts <list>      Staging hosts (enables SEO-ROBOTS-09)
-  --indexnow-key <key>        Your IndexNow key (enables SEO-SITEMAP-06)
-  --house-conventions         Enable the zero-weight house-convention rules
-  --third-party-resources     Extend SEO-ROBOTS-05B to other origins
-  --crux                      Ask the Chrome UX Report for field data (scan; needs CRUX_API_KEY)
-
-Review options (scan --review, and review):
-  --review                    Run the advisory AI review after the scan (needs AI_GATEWAY_API_KEY)
-  --review-pages <n>          Pages to review (default 6, at most 20)
-  --queries "<a;b>"           Searches the pages should answer, separated by ;
-  --queries-file <file>       The same, one per line
-
-  --help                      Show this help
-  --version                   Show the package, scanner and ruleset versions
-`;
+export const USAGE = usageText();
 
 export function parseArgs(argv: string[]): { positional: string[]; flags: Record<string, string | true> } {
   const positional: string[] = [];
