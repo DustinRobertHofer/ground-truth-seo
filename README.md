@@ -23,7 +23,7 @@ The scanner identifies itself honestly (`GroundTruthSEOScanner/<version>`), obey
 
 ## Use it with a coding agent
 
-The package ships an [Agent Skill](skills/ground-truth-seo/SKILL.md) that teaches Claude Code and other coding agents how to install and run the command line, set up its keys, and read `report.json` without adding SEO claims the report does not make. Write it into a project with:
+The package ships an [Agent Skill](skills/ground-truth-seo/SKILL.md) that teaches Claude Code and other coding agents how to get answers about a site from the command line (which command to run, where each answer lives in `report.json`) and how to present them: on a canvas, in the report's own words, with sources quoted exactly and no SEO claims the report does not make. For setup it points the agent to this README and the command-line page. Write it into a project with:
 
 ```bash
 npx ground-truth-seo skill      # writes .claude/skills/ground-truth-seo/SKILL.md

@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { CLI_BIN, CLI_COMMANDS, CLI_ENV, CLI_OPTIONS, CLI_OUTPUTS } from "../cli/options.js";
-import { SKILL_DEFAULT_DIR, SKILL_FILE, SKILL_NAME, skillMarkdown } from "./skill.js";
+import { CLI_COMMANDS, CLI_ENV, CLI_OPTIONS, CLI_OUTPUTS } from "../cli/options.js";
+import { CATEGORY_ORDER } from "../scanner/rules/types.js";
+import { SETUP_DOCS_URL, SKILL_DEFAULT_DIR, SKILL_FILE, SKILL_NAME, skillMarkdown } from "./skill.js";
 
 const committed = new URL(`../../skills/${SKILL_NAME}/${SKILL_FILE}`, import.meta.url);
 
@@ -27,15 +28,23 @@ describe("agent skill", () => {
     expect(SKILL_DEFAULT_DIR.endsWith(`/${SKILL_NAME}`)).toBe(true);
   });
 
-  it("documents every command, option, variable and output file the command line has", () => {
+  it("documents every command, option, output file and report area it can use", () => {
     const md = skillMarkdown();
-    for (const c of CLI_COMMANDS) expect(md, c.name).toContain(`\`${CLI_BIN} ${c.name}`);
+    for (const c of CLI_COMMANDS.filter((c) => c.name !== "skill")) expect(md, c.name).toContain(`| \`${c.name}`);
     for (const o of CLI_OPTIONS) expect(md, o.flag).toContain(`\`${o.flag}`);
-    for (const e of CLI_ENV) expect(md, e.name).toContain(`\`${e.name}\``);
-    for (const o of CLI_OUTPUTS) expect(md, o.file).toContain(`\`${o.file}\``);
-    for (const e of CLI_ENV.filter((v) => v.secret)) {
-      expect(e.obtain, e.name).toBeTruthy();
-      expect(md, e.name).toContain(e.obtain!);
-    }
+    for (const o of CLI_OUTPUTS.filter((o) => o.file !== SKILL_FILE)) expect(md, o.file).toContain(`\`${o.file}\``);
+    for (const key of CATEGORY_ORDER) expect(md, key).toContain(`\`${key}\``);
+  });
+
+  it("points to the documentation for setup instead of carrying it", () => {
+    const md = skillMarkdown();
+    expect(md).toContain(SETUP_DOCS_URL);
+    for (const e of CLI_ENV.filter((v) => v.obtain)) expect(md, e.name).not.toContain(e.obtain!);
+    for (const e of CLI_ENV.filter((v) => v.docsUrl)) expect(md, e.name).not.toContain(e.docsUrl!);
+    expect(md).not.toMatch(/npm install|\bexport [A-Z_]+=|setx /);
+  });
+
+  it("asks for results on a canvas", () => {
+    expect(skillMarkdown()).toMatch(/## Presenting it[\s\S]*Describe outcomes on a canvas/);
   });
 });

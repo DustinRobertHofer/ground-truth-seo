@@ -89,7 +89,7 @@ export const CLI_COMMANDS: readonly CliCommand[] = [
     args: "",
     summary: "Write the agent skill (SKILL.md) for Claude Code and other coding agents",
     description:
-      "Writes SKILL.md, an Agent Skill that teaches a coding agent how to install and run this command line, set up its keys, and read report.json without adding claims of its own. The default directory, .claude/skills/ground-truth-seo, is where Claude Code finds project skills; pass --out to put it elsewhere.",
+      "Writes SKILL.md, an Agent Skill that teaches a coding agent how to get answers about a site from this command line and present them on a canvas, without adding claims the report does not make. The default directory, .claude/skills/ground-truth-seo, is where Claude Code finds project skills; pass --out to put it elsewhere.",
     writes: ["SKILL.md"],
   },
 ];
@@ -217,7 +217,7 @@ export const CLI_OUTPUTS: readonly CliOutput[] = [
   },
   { file: "review.json", description: "The advisory review (with --review or review). Never part of the report or the score." },
   { file: "review.md", description: "A readable view of the review." },
-  { file: "SKILL.md", description: "The agent skill (skill command): how a coding agent installs, runs and reads the command line." },
+  { file: "SKILL.md", description: "The agent skill (skill command): how a coding agent gets answers about a site from the command line and presents them." },
 ];
 
 function pad(text: string, width: number): string {
