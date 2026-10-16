@@ -17,7 +17,9 @@
     "robots-txt",
     "sitemap",
     "deterministic",
-    "cli"
+    "cli",
+    "agent-skill",
+    "claude-code"
   ],
   "engines": {
     "node": ">=22"
@@ -50,6 +52,7 @@
     "dist",
     "docs/*.md",
     "docs/LICENSE",
+    "skills",
     "NOTICE"
   ],
   "sideEffects": false,
@@ -59,7 +62,8 @@
     "prepare": "npm run build",
     "lint": "eslint",
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "skill": "npm run build && node dist/cli.js skill --out skills/ground-truth-seo"
   },
   "dependencies": {
     "@rgrove/parse-xml": "^5.0.0",
