@@ -1,0 +1,9 @@
+ground-truth-seo
+Copyright 2026 <FILL IN: COPYRIGHT HOLDER>
+
+This product is licensed under the Apache License, Version 2.0 (LICENSE).
+
+The specification in docs/ is licensed under CC BY 4.0 (docs/LICENSE). The
+verbatim quotations in docs/KNOWLEDGE.md and in the ruleset under src/ belong to
+their publishers, named in docs/SOURCES.md, and are reproduced as attributed
+quotations; they are not licensed by this project.
