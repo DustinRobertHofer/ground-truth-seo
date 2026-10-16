@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { redactSecrets, run, SECRET_ENV, USAGE, type CliIo } from "./main.js";
 import { CLI_ENV, CLI_OPTIONS } from "./options.js";
+import { skillMarkdown } from "../skill/skill.js";
 
 const golden = new URL("../../fixtures/golden/broken-links/", import.meta.url);
 
@@ -70,6 +71,13 @@ describe("command line", () => {
 
   it("refuses --crux without CRUX_API_KEY", async () => {
     await expect(run(["scan", "https://www.example.com/", "--crux"], capture())).rejects.toThrow(/CRUX_API_KEY/);
+  });
+
+  it("writes the agent skill", async () => {
+    const io = capture();
+    await run(["skill", "--out", dir], io);
+    expect(readFileSync(join(dir, "SKILL.md"), "utf8")).toBe(skillMarkdown());
+    expect(io.out).toBe(`Agent skill written to ${join(dir, "SKILL.md")}\n`);
   });
 
   it("rejects unknown commands with the list of commands", async () => {

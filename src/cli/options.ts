@@ -6,7 +6,7 @@
  * Safe to import from browser code: it holds strings only.
  */
 
-export type CliCommandName = "scan" | "evaluate" | "review" | "diff";
+export type CliCommandName = "scan" | "evaluate" | "review" | "diff" | "skill";
 
 export interface CliCommand {
   name: CliCommandName;
@@ -38,6 +38,10 @@ export interface CliEnvVar {
   description: string;
   /** Holds a credential: never printed or written, and redacted from output. */
   secret: boolean;
+  /** For a key: how to get one, in one or two sentences. */
+  obtain?: string;
+  /** For a key: the provider's page that explains it. */
+  docsUrl?: string;
 }
 
 export interface CliOutput {
@@ -80,15 +84,24 @@ export const CLI_COMMANDS: readonly CliCommand[] = [
       "Compares two reports and prints, as canonical JSON, both snapshot IDs and scores, the new, resolved and changed findings keyed by rule, condition and URL, and whether the favicon changed.",
     writes: [],
   },
+  {
+    name: "skill",
+    args: "",
+    summary: "Write the agent skill (SKILL.md) for Claude Code and other coding agents",
+    description:
+      "Writes SKILL.md, an Agent Skill that teaches a coding agent how to install and run this command line, set up its keys, and read report.json without adding claims of its own. The default directory, .claude/skills/ground-truth-seo, is where Claude Code finds project skills; pass --out to put it elsewhere.",
+    writes: ["SKILL.md"],
+  },
 ];
 
 export const CLI_OPTIONS: readonly CliOption[] = [
   {
     flag: "--out",
     value: "<dir>",
-    commands: ["scan", "evaluate", "review"],
-    help: "Output directory (scan: scan-<host>, evaluate: ., review: beside the snapshot)",
-    description: "Where to write the files. Defaults: scan-<host> for scan, the current directory for evaluate, the snapshot's directory for review.",
+    commands: ["scan", "evaluate", "review", "skill"],
+    help: "Output directory (scan: scan-<host>, evaluate: ., review: beside the snapshot, skill: .claude/skills/ground-truth-seo)",
+    description:
+      "Where to write the files. Defaults: scan-<host> for scan, the current directory for evaluate, the snapshot's directory for review, .claude/skills/ground-truth-seo for skill.",
   },
   {
     flag: "--max-pages",
@@ -172,11 +185,20 @@ export const CLI_OPTIONS: readonly CliOption[] = [
 ];
 
 export const CLI_ENV: readonly CliEnvVar[] = [
-  { name: "CRUX_API_KEY", description: "A Chrome UX Report API key, required by --crux.", secret: true },
+  {
+    name: "CRUX_API_KEY",
+    description: "A Chrome UX Report API key, required by --crux.",
+    secret: true,
+    obtain:
+      "In the Google Cloud console, choose or create a project, enable the Chrome UX Report API, then create an API key under APIs & Services > Credentials and restrict it to that API.",
+    docsUrl: "https://developer.chrome.com/docs/crux/api",
+  },
   {
     name: "AI_GATEWAY_API_KEY",
     description: "A Vercel AI Gateway API key, required by --review and the review command. It works on any machine; no Vercel project is needed.",
     secret: true,
+    obtain: "In the Vercel dashboard, open AI Gateway, then API Keys, and choose Create key. Model calls are billed to that Vercel account.",
+    docsUrl: "https://vercel.com/docs/ai-gateway/authentication",
   },
   { name: "AI_REVIEW_MODEL", description: "The Gateway model ID the review uses (default anthropic/claude-sonnet-5.5).", secret: false },
   { name: "AI_REVIEW_DISABLED", description: "Set to 1 to turn the review off.", secret: false },
@@ -195,6 +217,7 @@ export const CLI_OUTPUTS: readonly CliOutput[] = [
   },
   { file: "review.json", description: "The advisory review (with --review or review). Never part of the report or the score." },
   { file: "review.md", description: "A readable view of the review." },
+  { file: "SKILL.md", description: "The agent skill (skill command): how a coding agent installs, runs and reads the command line." },
 ];
 
 function pad(text: string, width: number): string {
@@ -203,7 +226,7 @@ function pad(text: string, width: number): string {
 
 /** The --help text. */
 export function usageText(): string {
-  const command = (c: CliCommand) => `  ${pad(`${c.name} ${c.args}`, 28)}${c.summary}`;
+  const command = (c: CliCommand) => `  ${pad(`${c.name}${c.args ? ` ${c.args}` : ""}`, 28)}${c.summary}`;
   const option = (o: CliOption) => `  ${pad(o.value ? `${o.flag} ${o.value}` : o.flag, 28)}${o.help}`;
   const config = CLI_OPTIONS.filter((o) => o.commands.includes("evaluate") || (o.commands.includes("scan") && !o.commands.includes("review") && o.flag !== "--review"));
   const review = CLI_OPTIONS.filter((o) => !config.includes(o));

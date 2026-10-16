@@ -37,6 +37,9 @@ jobs:
           npx ground-truth-seo --version
           npx ground-truth-seo evaluate "$GITHUB_WORKSPACE/fixtures/golden/broken-links/snapshot.json" --max-pages 20 --out out
           cmp out/report.json "$GITHUB_WORKSPACE/fixtures/golden/broken-links/report.json"
+          npx ground-truth-seo skill
+          cmp .claude/skills/ground-truth-seo/SKILL.md "$GITHUB_WORKSPACE/skills/ground-truth-seo/SKILL.md"
+          cmp node_modules/ground-truth-seo/skills/ground-truth-seo/SKILL.md "$GITHUB_WORKSPACE/skills/ground-truth-seo/SKILL.md"
 
   determinism:
     # PRODUCT.md §6: environment and platform independence of report.json.

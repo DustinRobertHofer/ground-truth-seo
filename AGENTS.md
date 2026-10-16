@@ -43,6 +43,9 @@ picks them up by upgrading the package.
   AI_REVIEW_MODEL, AI_REVIEW_DISABLED). It loads no .env file. Keys never enter a snapshot, a
   report, a review file or anything printed; src/cli/main.ts redacts them as a last line of
   defense.
+- The agent skill (skills/ground-truth-seo/SKILL.md) is rendered by src/skill/skill.ts from the
+  command line's options and holds no SEO knowledge of its own. Regenerate it with `pnpm skill`
+  after changing src/cli/options.ts or the skill text; skill.test.ts fails while the copy is stale.
 - No runtime dependency on Next.js, a database, tsx or any hosting platform. Code that needs a
   framework (server-only markers, routes, database writes) belongs in the consuming application.
 - Relative imports carry a `.js` extension (NodeNext ESM). `src/index.ts` and

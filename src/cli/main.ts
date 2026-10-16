@@ -6,6 +6,7 @@
  *   ground-truth-seo evaluate <snapshot.json> [--out dir] [--engines google]
  *   ground-truth-seo review <snapshot.json> [--review-pages 6] [--queries "a;b"] [--queries-file f]
  *   ground-truth-seo diff <before/report.json> <after/report.json>
+ *   ground-truth-seo skill [--out .claude/skills/ground-truth-seo]
  *
  * Configuration comes from flags and plain environment variables only:
  * CRUX_API_KEY for --crux, AI_GATEWAY_API_KEY and AI_REVIEW_MODEL for --review,
@@ -27,6 +28,7 @@ import type { Report } from "../scanner/report/types.js";
 import { KNOWLEDGE_CUTOFF, RULESET_VERSION } from "../scanner/rules/index.js";
 import { canonicalize } from "../scanner/snapshot/canonical-json.js";
 import type { Snapshot } from "../scanner/snapshot/types.js";
+import { SKILL_DEFAULT_DIR, SKILL_FILE, skillMarkdown } from "../skill/skill.js";
 import { usageText } from "./options.js";
 
 /** Environment variables whose values must never be printed or written. */
@@ -188,7 +190,14 @@ export async function run(argv: string[], io: CliIo, hooks: RunHooks = {}): Prom
     io.stdout(`${canonicalize(diff)}\n`);
     return;
   }
-  throw new UsageError("commands: scan <url>, evaluate <snapshot.json>, review <snapshot.json>, diff <a.json> <b.json> (--help for options)");
+  if (command === "skill") {
+    const dir = typeof flags.out === "string" ? flags.out : SKILL_DEFAULT_DIR;
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, SKILL_FILE), skillMarkdown());
+    io.stdout(`Agent skill written to ${join(dir, SKILL_FILE)}\n`);
+    return;
+  }
+  throw new UsageError("commands: scan <url>, evaluate <snapshot.json>, review <snapshot.json>, diff <a.json> <b.json>, skill (--help for options)");
 }
 
 /** Runs the command line against process.argv and exits with 1 on failure, printing only the (redacted) message. */

@@ -21,6 +21,16 @@ npm install ground-truth-seo              # the library, for your own code
 
 The scanner identifies itself honestly (`GroundTruthSEOScanner/<version>`), obeys robots.txt, and never requests private or reserved network addresses.
 
+## Use it with a coding agent
+
+The package ships an [Agent Skill](skills/ground-truth-seo/SKILL.md) that teaches Claude Code and other coding agents how to install and run the command line, set up its keys, and read `report.json` without adding SEO claims the report does not make. Write it into a project with:
+
+```bash
+npx ground-truth-seo skill      # writes .claude/skills/ground-truth-seo/SKILL.md
+```
+
+Then ask the agent to audit the site. `--out <dir>` puts the skill elsewhere, for agents that read skills from another directory. The same file, zipped for upload to the Claude apps, is on the [command-line page](https://www.seoscanner.app/command-line#agent).
+
 ## Commands
 
 ```bash
@@ -28,6 +38,7 @@ ground-truth-seo scan <url> [options]                 # crawl, evaluate, write r
 ground-truth-seo evaluate <snapshot.json> [options]   # evaluate a stored snapshot again
 ground-truth-seo review <snapshot.json> [options]     # advisory AI review of a stored snapshot
 ground-truth-seo diff <before/report.json> <after/report.json>
+ground-truth-seo skill [--out dir]                    # write the agent skill (SKILL.md)
 ground-truth-seo --help
 ground-truth-seo --version
 ```
@@ -56,11 +67,15 @@ Runs the advisory content and AI-answer review (`docs/PRODUCT.md` §17) on a sto
 
 Compares two `report.json` files and prints, as canonical JSON, both snapshot IDs and overall scores, the new, resolved and changed findings, and whether the favicon changed.
 
+### `skill`
+
+Writes `SKILL.md`, the agent skill, to `.claude/skills/ground-truth-seo` (where Claude Code finds project skills) or to `--out`. It is rendered from the same command, option and variable data as `--help`, so it always matches the installed version.
+
 ### Options
 
 | Flag | Commands | Effect |
 | --- | --- | --- |
-| `--out <dir>` | scan, evaluate, review | Output directory. Defaults: `scan-<host>` for scan, `.` for evaluate, the snapshot's directory for review. |
+| `--out <dir>` | scan, evaluate, review, skill | Output directory. Defaults: `scan-<host>` for scan, `.` for evaluate, the snapshot's directory for review, `.claude/skills/ground-truth-seo` for skill. |
 | `--max-pages <n>` | scan, evaluate | Pages to fetch: the link crawl plus sitemap-only pages (default 500). |
 | `--max-depth <n>` | scan, evaluate | Link depth (default 20). |
 | `--max-extra-fetches <n>` | scan, evaluate | Budget for extra fetches: canonical targets, alternates, redirect targets (default 500). |
@@ -88,6 +103,7 @@ The specification also describes a rendered mode (headless Chromium) and a mobil
 | `report.md` | A readable view rendered from `report.json`. |
 | `snapshot.json` | Everything the scan fetched: every request and response, content-addressed bodies (SHA-256, base64), DNS and TLS records, and the single clock reading. Its `snapshot_id` is the SHA-256 of its canonical manifest, so two reports can be compared knowing whether their inputs differed. API keys never enter it. |
 | `review.json`, `review.md` | Only with `--review` or `review`: the advisory review. Never part of the report or the score. |
+| `SKILL.md` | Only with `skill`: the agent skill. |
 
 ## Determinism
 
@@ -106,7 +122,12 @@ The command line reads plain environment variables. It does not load `.env` file
 | `AI_REVIEW_MODEL` | The Gateway model ID for the review (default `anthropic/claude-sonnet-5.5`). |
 | `AI_REVIEW_DISABLED` | Set to `1` to turn the review off. |
 
-Keys never enter a snapshot, a report, a review file or anything the command prints; as a last line of defense the command line redacts their values from its output.
+To get the keys:
+
+- `CRUX_API_KEY`: in the Google Cloud console, choose or create a project, enable the Chrome UX Report API, then create an API key under APIs & Services > Credentials and restrict it to that API ([documentation](https://developer.chrome.com/docs/crux/api)).
+- `AI_GATEWAY_API_KEY`: in the Vercel dashboard, open AI Gateway, then API Keys, and choose Create key ([documentation](https://vercel.com/docs/ai-gateway/authentication)).
+
+Set them in your shell profile (`export CRUX_API_KEY=...` in `~/.zshrc` or `~/.bashrc`, `setx CRUX_API_KEY ...` on Windows) or as CI secrets. Keys never enter a snapshot, a report, a review file or anything the command prints; as a last line of defense the command line redacts their values from its output.
 
 A review costs one model call per sampled page plus one for the site (about $0.05 to $0.10 per page with the default model).
 
@@ -159,6 +180,8 @@ src/
   content-review/   the advisory AI review (PRODUCT.md §17, KNOWLEDGE.md §11)
   testing/          the in-memory site the fixtures run against
   cli/              the command line
+  skill/            the agent skill, rendered from the command line's options
+skills/             the generated SKILL.md (`pnpm skill`), shipped in the package
 fixtures/           acceptance, rule coverage, determinism and golden-report tests
 docs/               the specification
 ```
@@ -172,6 +195,7 @@ pnpm typecheck
 pnpm test        # ruleset integrity (every quote checked against KNOWLEDGE.md), core algorithms,
                  # acceptance criteria (PRODUCT.md §15), rule coverage fixtures, golden reports, determinism
 pnpm build       # dist/: ESM and type declarations
+pnpm skill       # regenerate skills/ground-truth-seo/SKILL.md after changing the command line's options
 node dist/cli.js scan https://www.example.com --max-pages 3 --out /tmp/example
 ```
 
